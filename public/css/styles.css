@@ -1,0 +1,620 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+.lato-regular {
+    font-family: "Lato", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.banner-container {
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: #577343;
+    color: #000000;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.banner-content {
+    display: inline-block;
+    animation: slide 17s linear infinite;
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.banner-content span {
+    margin-right: 50px;
+    font-size: 1.2em;
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(150%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+/* Pagina principal */
+
+.hamburg, .menuPrincipal {
+    display: none;
+}
+
+.header-content {
+    padding: 15px 0;
+    background-color: #fff;
+    color: #333;
+    text-align: center;
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.enlacesP a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.enlacesP .aux:hover {
+    color: #f5f5f5;
+    background-color: #333;
+    padding: 5px;
+    border-radius: 4px;
+    text-decoration: underline;
+}
+
+#logo{
+    height: 50px;
+    width: 55px;
+}
+
+img{
+    height: 30px;
+    width: 30px;
+}
+
+.enlacesI{
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.enlacesI{
+    padding-left: 25px;
+}
+
+.enlacesD{
+    padding-right: 25px;
+}
+
+.enlacesD{
+    justify-content: flex-end;
+    gap: 10px;
+    color: #fff;
+}
+
+.enlacesD, .enlacesI{
+    padding: 10px;
+    display: flex;
+    flex:1;
+}
+
+.colecciones{
+    text-align: center;
+}
+
+.colecciones img{
+    width: 400px;
+    height: 600px;
+}
+
+.colecciones img:hover{
+    opacity: 0.8;
+}
+
+/* Drops */
+.drops {
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+}
+
+.drops .fechasDrops{
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 20px;
+}
+
+.drops ul{
+    list-style: none;
+}
+
+.drops li {
+    padding:8px;
+}
+
+.drops li:hover{
+    color: #0008ff;
+}
+
+.drops .capaTabla img{
+    height: 140px;
+    width: 80px;
+}
+
+.drops .capaTabla{
+    align-items: center;
+    height: auto;
+}
+
+/* Tienda */
+
+.tienda {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    justify-items: center;
+}
+
+.tienda .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 10px;
+}
+
+.tienda:has(.item:nth-child(2):last-child) {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Retail */
+.mapa{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.infoTienda{
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+/* Colecciones */
+.capaNavegador{
+    text-align: center;
+}
+
+.navegador{
+    align-content: center;
+
+}
+ul.navegador li{
+    display: inline;
+}
+
+.navegador li a{
+    padding: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #333;
+}
+
+.navegador li a:hover{
+    color: #ffff00;
+    background-color: #333;
+    padding: 3px;
+    opacity: 0.9;
+    border-radius: 1px;
+}
+
+.capaTabla{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.capaTabla table {
+    border-collapse:separate;
+}
+
+.capaTabla td {
+    padding: 10px;
+}
+
+.coleccionesTablet {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    width: 100%;
+    justify-items: center;
+    padding: 20px;
+}
+
+.capaTabla img{
+    width: 200px;
+    height: 300px;
+}
+
+.capaTabla p{
+    padding-top: 7px;
+    text-decoration: none;
+    color: #333;
+}
+
+.imagenesHover{
+    transition: 0.5 ease;
+}
+
+.Colecciones .imagenesHover:hover {
+    content: attr(data-hover);
+    width: 200px;
+}
+
+/* Descripciones Articulos */
+
+.flechaAtras{
+    margin-left: 47%;
+}
+
+.capaTabla .dimensionesTexto{
+    max-width: 300px;
+    text-align: center;
+    font-size: 18px;
+}
+
+#talla{
+    width: 70px;
+    height: auto;
+    font-size: 15px;
+    padding: 3px;
+    border-radius: 0%;
+    border: 2px solid gray;
+}
+
+#botonCompra{
+    width: 120px;
+    height: auto;
+    padding: 5px;
+    border-radius: 0%;
+    border: solid 2px #F5B4F1;
+    background-color: #3F86F5;
+    color: white;
+}
+
+/* Media queries */
+
+/* Media query para moviles */
+
+@media (max-width: 600px) {
+
+    .menuPrincipal {
+        position: fixed;
+        top: 21px;
+        left: 0;
+        width: 60%;
+        height: 100vh;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+        z-index: 2000;
+        padding: 20px;
+        list-style: none;
+        margin-top: 3vh;
+    }
+
+    .menuPrincipal.active {
+        transform: translateX(0);
+    }
+
+    .hamburg {
+        width: 30px;
+        height: 47px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: fixed;
+        top: 65px;
+        z-index: 3000;
+        left: 1px;
+    }
+
+    .menuPrincipal li {
+        list-style: none;
+        padding: 10px 0;
+        width: 100%;
+    }
+
+    .menuPrincipal a {
+        text-decoration: none;
+        font-size: 18px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    a{
+        text-decoration: none;
+    }
+
+    body {
+        background-size: cover;
+    }
+
+    .enlacesP{
+        display: none;
+    }
+
+    .colecciones img {
+        width: 100%;
+        height: auto;
+    }
+
+    .capaTabla {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .capaTabla img {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+    }
+
+    .banner-content span {
+        font-size: 1em;
+    }
+
+    img {
+        height: 25px;
+        width: 25px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-content nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-content img {
+        margin: 10px 0;
+    }
+
+    .enlacesI, .enlacesD {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 10px 0;
+        color: #000000;
+    }
+
+    .Colecciones td{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .coleccionesTablet {
+        grid-template-columns: 1fr;
+    }
+
+    .prendas td{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .capaTabla .dimensionesTexto{
+        max-width: 80%;
+        text-align: center;
+        margin: 0 auto;
+        font-size: 18px;
+    }
+
+    .prendas img{
+        width: 80%;
+    }
+
+    /* Tienda */
+    .navegadorTienda .capaTabla{
+        margin-top: 5vh;
+        margin-bottom: 60px;
+    }
+
+    .tienda {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        justify-items: center;
+    }
+
+    .tienda .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin: 10px;
+    }
+
+    .tienda img {
+        width: 100%;
+        height: 30vh;
+    }
+
+}
+
+/* TABLETS (601px - 1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+
+    .menuPrincipal {
+        position: fixed;
+        top: 21px;
+        left: 0;
+        width: 25%;
+        height: 100vh;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+        z-index: 2000;
+        padding: 20px;
+        list-style: none;
+        margin-top: 4vh;
+    }
+
+    .menuPrincipal.active {
+        transform: translateX(0);
+    }
+
+    .hamburg {
+        width: 60px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: fixed;
+        top: 65px;
+        z-index: 3000;
+        left: 1px;
+    }
+
+    .menuPrincipal li {
+        list-style: none;
+        padding: 10px 0;
+        width: 100%;
+    }
+
+    .menuPrincipal a {
+        text-decoration: none;
+        font-size: 18px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .enlacesI, .enlacesD {
+        color: #000000;
+    }
+
+    .enlacesI{
+        padding-left: 45px;
+    }
+
+    .enlacesD{
+        padding-right: 25px;
+    }
+
+    a{
+        text-decoration: none;
+    }
+
+    nav {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .colecciones img {
+        width: 300px;
+        height: 450px;
+    }
+
+    .aux{
+        display: none;
+    }
+
+    .capaTabla {
+        flex-direction: row;
+        height: auto;
+        flex-wrap: wrap;
+    }
+
+    .capaTabla img {
+        width: 180px;
+        height: 270px;
+    }
+
+    .banner-content span {
+        font-size: 1.1em;
+    }
+
+    /* Colecciones */
+    .coleccionesTablet {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .coleccionesTablet:has(.item:nth-child(5)) .item:nth-child(2){
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Tienda */
+    .navegadorTienda .capaTabla{
+        margin-top: 5vh;
+        margin-bottom: 60px;
+    }
+
+    .tienda {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        justify-items: center;
+        align-items: center;
+    }
+
+    .tienda .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .tienda img {
+        width: 90%;
+        height: 40vh;
+    }
+
+    .tienda:has(.item:nth-child(2):last-child) {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .tienda:has(.item:nth-child(10):last-child) .item:last-child {
+        grid-column: 2 / 3;
+    }
+}

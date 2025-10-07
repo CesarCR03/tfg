@@ -1,0 +1,53 @@
+<?php
+// app/Models/Producto.php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Producto extends Model
+{
+    // Nombre de la tabla en la BD
+    protected $table = 'Producto';
+
+    // Clave primaria
+    protected $primaryKey = 'id_producto';
+
+    // Desactivamos timestamps si la tabla no tiene created_at/updated_at
+    public $timestamps = false;
+
+    // Campos que pueden asignarse masivamente
+    protected $fillable = [
+        'Nombre',
+        'Descripcion',
+        'Precio',   // en euros (€), número decimal
+        'Stock'     // en unidades (u)
+    ];
+
+    /**
+     * Relación muchos a muchos con Categoria
+     */
+    public function categorias()
+    {
+        return $this->belongsToMany(
+            Categoria::class,
+            'Categoria_Producto',
+            'id_producto',
+            'id_categoria'
+        );
+    }
+
+    /**
+     * Relación uno a muchos con Imagen
+     */
+    public function imagenes()
+    {
+        return $this->hasMany(Imagen::class, 'producto_id');
+    }
+
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class, 'producto_id');
+    }
+}
+
