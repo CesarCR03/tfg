@@ -13,7 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call([
+            // Aseguramos que se creen primero las tablas principales
+            //CategoriaSeeder::class,
+            ColeccionSeeder::class,
+            // Y después las tablas pivote
+            CategoriaProductoSeeder::class,
+            ColeccionProductoSeeder::class,
+        ]);
 
         User::factory()->create([
             'name' => 'Test User',

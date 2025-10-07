@@ -37,6 +37,20 @@ class Producto extends Model
         );
     }
 
+    // app/Models/Producto.php (dentro de la clase Producto)
+// ...
+
+
+// Relación muchos a muchos con Coleccion
+    public function colecciones()
+    {
+        return $this->belongsToMany(
+            Coleccion::class,
+            'Coleccion_Producto',
+            'id_producto',
+            'id_coleccion'
+        );
+    }
     /**
      * Relación uno a muchos con Imagen
      */
@@ -45,9 +59,9 @@ class Producto extends Model
         return $this->hasMany(Imagen::class, 'producto_id');
     }
 
-    public function producto()
+    /*public function producto()
     {
         return $this->belongsTo(Producto::class, 'producto_id');
-    }
+    }*/
 }
 
