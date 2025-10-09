@@ -13,9 +13,11 @@
             <img src="{{ asset('Img/PaginaPrincipal/on_black_logo_transparent.png') }}"
                  id="logo" alt="logo tienda">
             <span class="enlacesD">
-                <a href="{{ url('terminos') }}">Términos y condiciones</a>
-                <a href="{{ url('ayuda') }}">Ayuda</a>
+                <a href="{{ route('terminos') }}">Términos y condiciones</a>
+                <a href="{{ route('politica.cookies') }}">Política de Cookies</a>
             </span>
         </nav>
     </div>
 </footer>
+
+

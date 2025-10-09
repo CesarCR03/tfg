@@ -54,7 +54,7 @@
             <div class="coleccionesTablet">
                 @foreach ($productos as $producto)
                     <div class="item">
-                        <a>
+                        <a href="{{ route('productos.show', $producto->id_producto) }}">
                             @if ($producto->imagenes->isNotEmpty())
                                 <img src="{{ asset('storage/' . $producto->imagenes->first()->URL) }}"
                                      data-hover="{{ asset('storage/' . $producto->imagenes->first()->URL) }}"

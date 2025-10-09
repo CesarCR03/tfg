@@ -10,5 +10,7 @@ Route::get('/coleccion/{id}', [ProductoController::class, 'coleccion'])->name('c
 Route::get('/categoria/{id}', [ProductoController::class, 'porCategoria'])->name('categoria.show');
 Route::get('/coleccion/{idColeccion}/categoria/{idCategoria}',
     [ProductoController::class, 'porColeccionYCategoria'])->name('coleccion.categoria.show');
+Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
 
-
+Route::view('/terminos', 'static.terminos')->name('terminos');
+Route::view('/politica-cookies', 'static.cookies')->name('politica.cookies');

@@ -10,7 +10,7 @@
     @stack('styles')
     <style>
         body {
-            background-image: url('{{ asset("Img/PaginaPrincipal/ImagenTraslucida.jpg") }}');
+            /*background-image: url('{{ asset("Img/PaginaPrincipal/ImagenTraslucida.jpg") }}');*/
             margin: 0;
             padding-top: 180px;
             background-repeat: no-repeat;
