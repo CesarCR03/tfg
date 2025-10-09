@@ -16,7 +16,7 @@
                 </a>
             </span>
             <span class="enlacesP">
-                <a href="{{route('home')}}"><img src="../../Img/PaginaPrincipal/on_black_logo_transparent.png"></a>
+                <a href="{{route('home')}}"><img src="{{ asset('Img/PaginaPrincipal/on_black_logo_transparent.png') }}"></a>
                 <a href="{{ route('tienda') }}" class="aux">Tienda</a>
                 <a href="{{ url('menu/drops') }}" class="aux">Drops</a>
                 <a href="{{ url('menu/retail') }}" class="aux">Retail</a>

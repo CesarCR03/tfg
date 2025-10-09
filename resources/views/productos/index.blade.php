@@ -7,16 +7,48 @@
     <main>
         <div class="capaNavegador">
             <ul class="navegador">
+                {{-- Lógica para establecer la ruta "Todo" y el título dinámico --}}
+                @php
+                    if (isset($currentCollectionId)) {
+                        $todoRoute = route('coleccion', $currentCollectionId);
+                        // Puedes obtener el nombre real de la colección si lo pasas desde el controlador,
+                        // pero por ahora usamos el ID.
+                        $title = 'Colección ' . $currentCollectionId;
+                    } else {
+                        $todoRoute = route('tienda');
+                        $title = 'Tienda';
+                    }
+
+                    // Actualiza el título de la página (si usas @section('title'))
+                    View::share('title', $title);
+                @endphp
+
                 <li>·</li>
-                <li><a href="Coleccion1.html">Todo</a></li>
+                <li><a href="{{ $todoRoute }}">Todo</a></li>
                 <li>·</li>
-                <li><a href="Superiores2021.html">Superiores</a></li>
-                <li>·</li>
-                <li><a href="Pantalones2021.html">Pantalones</a></li>
-                <li>·</li>
-                <li><a href="Accesorios2021.html">Accesorios</a></li>
-                <li>·</li>
-            </ul>
+
+                {{-- Generar enlaces de categorías dinámicamente --}}
+                {{-- Usamos $categories que viene del controlador --}}
+                @foreach ($categories as $category)
+                    <li>
+                        {{-- Comprueba si estamos en el contexto de una colección (ID NO NULO) --}}
+                        @if (isset($currentCollectionId))
+                            {{-- Si hay una colección activa, usamos la ruta combinada para filtrar DENTRO de ella --}}
+                            <a href="{{ route('coleccion.categoria.show', [
+                                'idColeccion' => $currentCollectionId,
+                                'idCategoria' => $category->id_categoria // Usamos la columna real de la BD
+                            ]) }}">
+                                {{ $category->Nombre }}
+                            </a>
+                        @else
+                            {{-- Si no hay colección activa (estamos en /productos), usamos la ruta simple para filtrar en TODAS las colecciones --}}
+                            <a href="{{ route('categoria.show', $category->id_categoria) }}">
+                                {{ $category->Nombre }}
+                            </a>
+                        @endif
+                    </li>
+                    <li>·</li>
+            @endforeach
         </div>
         <div class="capaTabla">
             <div class="coleccionesTablet">
