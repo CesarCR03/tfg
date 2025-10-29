@@ -4,74 +4,51 @@
 
 @section('content')
     <main>
-        {{-- Flecha de retroceso --}}
-        <div class="flechaAtras">
-            <a href="{{ url()->previous() }}">
-                <img src="{{ asset('Img/PaginaPrincipal/double-arrows_10420972.png') }}" alt="Atrás">
-            </a>
-        </div>
+        {{-- CONTENEDOR PRINCIPAL FLEXBOX --}}
+        <div class="product-detail-flex-container">
 
-        <div class="capaTabla">
-            <table class="prendas">
-                <tr>
-                    {{-- COLUMNA 1: IMAGEN DEL PRODUCTO (Galería) --}}
-                    <td colspan="1">
-                        <div class="galeria-imagenes">
-                            @if ($producto->imagenes->isNotEmpty())
-                                <img src="{{ asset('storage/' . $producto->imagenes->first()->URL) }}"
-                                     alt="Imagen principal de {{ $producto->Nombre }}">
-                            @endif
-                        </div>
-                    </td>
+            {{-- Columna 1: IMAGEN --}}
+            <div class="product-image-area">
+                <div class="galeria-imagenes">
+                    @if ($producto->imagenes->isNotEmpty())
+                        <img src="{{ asset('storage/' . $producto->imagenes->first()->URL) }}"
+                             alt="Imagen principal de {{ $producto->Nombre }}" class="product-main-image">
+                    @endif
+                </div>
+            </div>
 
-                    {{-- COLUMNA 2: FORMULARIO DE COMPRA --}}
-                    <td class="dimensionesTexto product-detail-info">
-                        <h1>{{ $producto->Nombre }}</h1>
+            {{-- Columna 2: DETALLES Y FORMULARIO --}}
+            <div class="product-info-area">
+                <h1 class="product-name-title">{{ $producto->Nombre }}</h1>
+                <p class="product-description">{{ $producto->Descripcion }}</p>
 
-                        <p>{{ $producto->Descripcion }}</p>
+                <br>
 
-                        <br>
+                {{-- INICIO DEL FORMULARIO DEL CARRITO --}}
+                <form action="{{ route('cart.add') }}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <input type="hidden" name="id_producto" value="{{ $producto->id_producto }}">
+                    <input type="hidden" name="cantidad" value="1">
+                    {{-- Fila de Controles (Precio, Talla, Cantidad) --}}
+                    <div class="product-controls-row">
+                        <span class="price-display">{{ number_format($producto->Precio, 2) }} €</span>
 
-                        {{-- INICIO DEL FORMULARIO DEL CARRITO (SIN @csrf) --}}
-                        <form action="{{ route('cart.add') }}" method="POST">
-                            @csrf
-                            @method('POST') {{-- Se mantiene el método HTTP --}}
+                        <select name="talla" id="talla" class="product-talla-select" required>
+                            <option value="" disabled selected>Talla</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                        </select>
+                    </div>
 
-                            {{-- Campo oculto para enviar el ID del producto --}}
-                            <input type="hidden" name="id_producto" value="{{ $producto->id_producto }}">
-
-                            <table class="product-form-table">
-                                <tr>
-                                    {{-- Precio --}}
-                                    <td><span class="precio">{{ number_format($producto->Precio, 2) }} €</span></td>
-
-                                    {{-- Select Talla --}}
-                                    <td>
-                                        <select name="talla" id="talla" required>
-                                            <option value="" disabled selected>Talla</option>
-                                            <option value="S">S</option>
-                                            <option value="M">M</option>
-                                            <option value="L">L</option>
-                                            <option value="XL">XL</option>
-                                        </select>
-                                    </td>
-
-                                    {{-- Cantidad --}}
-                                    <td>
-                                        <input type="number" name="cantidad" value="1" min="1" class="quantity-input" required>
-                                    </td>
-
-                                    {{-- Botón de Carrito --}}
-                                    <td>
-                                        <input type="submit" id="botonCompra" value="Añadir al carrito">
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                        {{-- FIN DEL FORMULARIO --}}
-                    </td>
-                </tr>
-            </table>
+                    {{-- Botón "Añadir al Carrito" (DEBAJO DE LOS CONTROLES) --}}
+                    <div class="add-to-cart-group">
+                        <input type="submit" id="botonCompra" class="add-to-cart-btn" value="Añadir al carrito">
+                    </div>
+                </form>
+                {{-- FIN DEL FORMULARIO --}}
+            </div>
         </div>
     </main>
 @endsection

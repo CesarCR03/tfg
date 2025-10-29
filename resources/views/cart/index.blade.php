@@ -8,9 +8,9 @@
             <h1 class="cart-header-title">CESTA</h1>
 
             @if ($cesta->productos->isEmpty())
-                <div class="empty-cart-message">
-                    <p>Tu cesta está vacía. ¡Añade algunos productos para empezar a comprar!</p>
-                    <a href="{{ route('tienda') }}">Ir a la Tienda</a>
+                <div class="empty-cart-message min-height-viewport">
+                    <p>La cesta está vacía, espabila un poco.</p>
+                    <a href="{{ route('tienda') }}">Comprar</a>
                 </div>
             @else
                 @php
@@ -85,7 +85,6 @@
                 {{-- Resumen y Botón de Pago --}}
                 <div class="cart-summary-footer">
                     <div class="summary-details">
-                        <p class="summary-tax-note">Impuesto incluido. Los gastos de envío se calculan en la pantalla de pago.</p>
                         <p class="summary-total-text">Total: <span class="summary-total-value">€{{ number_format($totalGeneral, 2) }} EUR</span></p>
                     </div>
                     <button class="checkout-btn">FINALIZAR COMPRA</button>

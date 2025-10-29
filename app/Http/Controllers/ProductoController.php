@@ -30,13 +30,6 @@ class ProductoController extends Controller
 
     public function porCategoria($idCategoria)
     {
-        /*$productos = Producto::with('imagenes')
-            ->whereHas('categorias', function ($query) use ($idCategoria) {
-                $query->where('Categoria.id_categoria', $idCategoria);
-            })
-            ->paginate(12);
-
-        return view('productos.index', compact('productos'));*/
         $productos = Producto::with('imagenes')
             ->whereHas('categorias', function ($query) use ($idCategoria) {
                 $query->where('Categoria.id_categoria', $idCategoria);

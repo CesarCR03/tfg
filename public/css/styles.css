@@ -19,7 +19,15 @@ header {
     left: 0;
     z-index: 1000;
 }
-
+html, body {
+    /* Asegura que el contenedor principal tome 100% del viewport */
+    height: 100%;
+    min-height: 100vh;
+}
+main {
+    /* Calcula la altura restante después del header fijo (ej. 140px) */
+    min-height: calc(100vh - 140px);
+}
 .banner-container {
     overflow: hidden;
     white-space: nowrap;
@@ -315,33 +323,89 @@ ul.navegador li{
 
 /* Descripciones Articulos */
 
-.flechaAtras{
-    margin-left: 47%;
+.product-detail-flex-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 20px;
+    align-items: flex-start; /* Alinea los elementos a la parte superior */
 }
 
-.capaTabla .dimensionesTexto{
-    max-width: 300px;
-    text-align: center;
-    font-size: 18px;
+.product-image-area {
+    flex: 1 1 50%; /* Ocupa la mitad del espacio */
+    padding-right: 40px;
 }
 
-#talla{
-    width: 70px;
+.product-main-image {
+    width: 100%;
     height: auto;
-    font-size: 15px;
-    padding: 3px;
-    border-radius: 0%;
-    border: 2px solid gray;
+    max-width: 400px;
+    display: block;
 }
 
-#botonCompra{
-    width: 120px;
-    height: auto;
-    padding: 5px;
-    border-radius: 0%;
-    border: solid 2px #F5B4F1;
-    background-color: #3F86F5;
+.product-info-area {
+    flex: 1 1 50%; /* Ocupa la otra mitad del espacio */
+}
+
+.product-name-title {
+    font-family: "Playfair Display", serif;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.product-description {
+    font-family: "Lato", serif;
+    margin-bottom: 25px;
+    color: #555;
+    line-height: 2;
+}
+
+/* Fila de Controles (Precio, Talla) */
+.product-controls-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px; /* Espacio entre los controles y el botón Añadir */
+    align-items: center;
+}
+
+.price-display {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: black;
+}
+
+.product-talla-select {
+
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 1em;
+}
+
+/* Botón Añadir al Carrito (Ajustado para ser un bloque grande) */
+.add-to-cart-group {
+    /* El botón se posiciona directamente debajo de la fila de controles */
+    width: 100%;
+}
+
+.add-to-cart-btn {
+    width: 100%;
+    max-width: 250px; /* Limita el ancho en pantallas muy grandes */
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
     color: white;
+    background-color: #577343; /* Usando el color de acento */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-to-cart-btn:hover {
+    background-color: white; /* Invierte los colores */
+    color: #577343; /* El texto se vuelve verde */
+    border:#577343 solid 2px;
 }
 /* Carrito compras */
 
@@ -524,6 +588,40 @@ ul.navegador li{
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+/* Cesta vacia */
+.min-height-viewport {
+    text-align: center;
+    min-height: 100vh;
+}
+
+.empty-cart-message a {
+    /* 1. Apariencia */
+    display: inline-block; /* Permite aplicar padding y dimensiones */
+    margin-top: 20px;
+    padding: 10px 20px; /* Tamaño de botón */
+
+    /* 2. Color y Fondo (usando el color de acento de tu web) */
+    background-color: #577343;
+    color: white;
+
+    /* 3. Tipografía y Decoración */
+    text-decoration: none;
+    font-family: "Lato", serif;
+    font-weight: bold; /* Le da cuerpo al texto */
+    font-size: 1.1em;
+
+    /* 4. Bordes y Transición */
+    border: 2px solid transparent; /* Borde transparente para transición */
+    transition: all 0.3s ease; /* Transición suave para el efecto hover */
+}
+
+/* Efecto Hover (al pasar el ratón) */
+.empty-cart-message a:hover {
+    background-color: white; /* Invierte los colores */
+    color: #577343; /* El texto se vuelve verde */
+    border-color: #577343; /* El borde aparece y es verde */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 /* Media queries */
 
@@ -733,6 +831,47 @@ ul.navegador li{
     .checkout-btn {
         width: 100%;
     }
+    /* Disposición de dos columnas */
+    .product-detail-flex-container {
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left; /* Des-centra el texto */
+    }
+
+    .product-image-area {
+        flex: 1 1 50%;
+        padding-right: 40px;
+        margin-bottom: 0;
+        text-align: left;
+    }
+
+    .product-main-image {
+        margin: 0; /* Des-centra la imagen */
+    }
+
+    .product-info-area {
+        flex: 1 1 50%;
+        padding-top: 0;
+    }
+
+    .product-controls-row {
+        flex-direction: row; /* Vuelve a poner los controles en línea horizontal */
+        gap: 20px;
+        align-items: center;
+        justify-content: flex-start; /* Alinea los controles a la izquierda */
+    }
+
+    .product-talla-select {
+        width: auto;
+    }
+
+    .add-to-cart-group {
+        text-align: left;
+    }
+
+    .add-to-cart-btn {
+        max-width: 200px; /* Permite que el botón sea más ancho */
+    }
 }
 
 /* TABLETS (601px - 1024px) */
@@ -902,5 +1041,46 @@ ul.navegador li{
     .checkout-btn {
         width: auto;
         margin-top: 0;
+    }
+    /* Disposición de dos columnas */
+    .product-detail-flex-container {
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left; /* Des-centra el texto */
+    }
+
+    .product-image-area {
+        flex: 1 1 50%;
+        padding-right: 40px;
+        margin-bottom: 0;
+        text-align: left;
+    }
+
+    .product-main-image {
+        margin: 0; /* Des-centra la imagen */
+    }
+
+    .product-info-area {
+        flex: 1 1 50%;
+        padding-top: 0;
+    }
+
+    .product-controls-row {
+        flex-direction: row; /* Vuelve a poner los controles en línea horizontal */
+        gap: 20px;
+        align-items: center;
+        justify-content: flex-start; /* Alinea los controles a la izquierda */
+    }
+
+    .product-talla-select {
+        width: auto;
+    }
+
+    .add-to-cart-group {
+        text-align: left;
+    }
+
+    .add-to-cart-btn {
+        max-width: 200px; /* Permite que el botón sea más ancho */
     }
 }
