@@ -47,7 +47,6 @@
                         <input type="submit" id="botonCompra" class="add-to-cart-btn" value="Añadir al carrito">
                     </div>
                 </form>
-                {{-- FIN DEL FORMULARIO --}}
             </div>
         </div>
     </main>

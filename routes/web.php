@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/productos', [ProductoController::class, 'showProducts'])->name('tienda');
@@ -23,3 +24,8 @@ Route::post('/carrito/add', [CartController::class, 'addToCart'])->name('cart.ad
 Route::delete('/carrito/remove/{idProducto}/{talla}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 // PATCH: Actualiza la cantidad de un producto específico en la cesta
 Route::patch('/carrito/update', [CartController::class, 'updateCart'])->name('cart.update');
+Route::get('/locations', [HomeController::class, 'locations'])->name('locations');
+// RUTA PARA DROPS (Página inicial de drops)
+Route::get('/menu/drops', [HomeController::class, 'drops'])->name('drops.index');
+// RUTA PARA DROPS (Filtrar por colección)
+Route::get('/menu/drops/{idColeccion}', [HomeController::class, 'drops'])->name('drops.show');

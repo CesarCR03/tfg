@@ -180,41 +180,67 @@ img{
 }
 
 /* Drops */
-.drops {
+.drops-gallery-container {
     display: flex;
-    padding: 20px;
-    justify-content: center;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 20px;
+    align-items: flex-start;
 }
 
-.drops .fechasDrops{
-    color: black;
+/* Columna 1: Menú */
+.drops-menu-area {
+    flex: 0 0 250px;
+    padding-right: 40px;
+}
+
+.lookbook-preview {
+    font-size: 0.85em;
     font-weight: bold;
-    font-size: 20px;
-    margin-right: 20px;
+    color: #555;
+    margin-top: 5px;
 }
 
-.drops ul{
-    list-style: none;
+/* Contenedor principal de la Galería (Imagen grande + Miniaturas) */
+.gallery-content-area {
+    flex: 1; /* Ocupa el espacio restante */
+    display: flex;
+    gap: 20px;
 }
 
-.drops li {
-    padding:8px;
+/* Columna 2: Imagen Principal */
+.main-image-view {
+    flex: 0 0 40%;
 }
 
-.drops li:hover{
-    color: #0008ff;
+.drop-main-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border: 1px solid #ccc;
 }
 
-.drops .capaTabla img{
-    height: 140px;
-    width: 80px;
+/* Columna 3: Miniaturas */
+.thumbnails-grid-area {
+    flex: 0 0 20%;
 }
 
-.drops .capaTabla{
-    align-items: center;
+.thumbnails-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 miniaturas por fila en escritorio */
+    gap: 10px;
+}
+
+.thumbnail-item {
+    cursor: pointer;
+    overflow: hidden;
+    border: 2px solid transparent;
+}
+
+.thumbnail-img {
+    width: 100%;
     height: auto;
 }
-
 /* Tienda */
 
 .tienda {
@@ -238,7 +264,7 @@ img{
     gap: 20px;
 }
 
-/* Retail */
+/* Locations */
 .mapa{
     display: flex;
     align-items: center;
@@ -872,6 +898,74 @@ ul.navegador li{
     .add-to-cart-btn {
         max-width: 200px; /* Permite que el botón sea más ancho */
     }
+    /* Drops */
+    .drops-gallery-container {
+        display: flex;
+        flex-direction: column; /* Apilamiento por defecto (Móvil) */
+        max-width: 1200px;
+        margin: 30px auto 50px auto;
+        padding: 0 10px;
+    }
+
+    /* Columna 1: Menú (Móvil - Se muestra horizontalmente) */
+    .drops-menu-area {
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    .drops-menu-area ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Centrar los enlaces de colección */
+        gap: 10px;
+        list-style: none; /* ELIMINA LOS PUNTOS */
+        padding: 0;
+    }
+
+    .drops-menu-area li {
+        padding: 5px;
+    }
+
+    .drops-menu-area a {
+        font-size: 1.1em;
+    }
+
+    /* Contenedor de la Galería */
+    .gallery-content-area {
+        flex-direction: column-reverse; /* Miniaturas encima de la imagen principal en móvil */
+        display: flex;
+        gap: 15px;
+        width: 100%;
+    }
+
+    /* Imagen Principal y Miniaturas */
+    .main-image-view {
+        order: 2; /* Imagen principal debajo de las miniaturas */
+        width: 100%;
+    }
+
+    .drop-main-img {
+        width: 100%;
+        height: auto;
+        border: 1px solid #ccc;
+    }
+
+    .thumbnails-grid-area {
+        order: 1; /* Miniaturas encima */
+        width: 100%;
+    }
+
+    .thumbnails-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4 miniaturas por fila en móvil */
+        gap: 8px;
+    }
+
+    .product-large-img, .product-small-img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
 }
 
 /* TABLETS (601px - 1024px) */
@@ -937,8 +1031,15 @@ ul.navegador li{
         padding-right: 25px;
     }
 
-    a{
-        text-decoration: none;
+    .enlacesD a,
+    .enlacesD a:visited {
+        color: #333; /* Forzar color negro o gris oscuro */
+        /* Puedes añadir font-weight: bold; si deseas que destaquen más */
+        text-decoration: none; /* Eliminar el subrayado (aunque tu estilo por defecto ya lo maneja) */
+    }
+    .enlacesD a:hover {
+        color: #577343; /* Ejemplo: Cambiar al color verde de acento al pasar el ratón */
+        text-decoration: underline; /* Puedes añadir un subrayado al pasar el ratón */
     }
 
     nav {
@@ -1082,5 +1183,48 @@ ul.navegador li{
 
     .add-to-cart-btn {
         max-width: 200px; /* Permite que el botón sea más ancho */
+    }
+
+    /* Drops */
+    .drops-gallery-container {
+        flex-direction: row; /* Vuelve a la disposición horizontal de 3 columnas */
+        padding: 0 15px;
+    }
+
+    /* Columna 1: Menú Lateral */
+    .drops-menu-area {
+        flex: 0 0 180px; /* Ancho fijo para el menú */
+        padding-right: 30px;
+        margin-bottom: 0;
+    }
+
+    .drops-menu-area ul {
+        flex-direction: column; /* Vuelve a la lista vertical */
+        justify-content: flex-start;
+        gap: 5px;
+    }
+
+    /* Contenedor de la Galería (Imagen Principal + Miniaturas) */
+    .gallery-content-area {
+        flex-direction: row; /* Imagen principal y miniaturas en fila */
+        gap: 15px;
+        flex-grow: 1;
+    }
+
+    /* Columna 2: Imagen Principal */
+    .main-image-view {
+        flex: 1 1 40%; /* Ocupa la mayor parte del espacio */
+        order: 1;
+    }
+
+    /* Columna 3: Miniaturas */
+    .thumbnails-grid-area {
+        flex: 0 0 20%; /* Ancho reducido para las miniaturas */
+        order: 2;
+    }
+
+    .thumbnails-grid {
+        grid-template-columns: 1fr; /* 1 miniatura por fila para usar el espacio vertical */
+        gap: 10px;
     }
 }

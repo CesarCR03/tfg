@@ -19,14 +19,14 @@
                 <a href="{{route('home')}}"><img src="{{ asset('Img/PaginaPrincipal/on_black_logo_transparent.png') }}"></a>
                 <a href="{{ route('tienda') }}" class="aux">Tienda</a>
                 <a href="{{ url('menu/drops') }}" class="aux">Drops</a>
-                <a href="{{ url('menu/retail') }}" class="aux">Retail</a>
+                <a href="{{ route('locations') }}" class="aux">Locations</a>
                 <a class="aux">Influencers</a>
             </span>
             <ul class="menuPrincipal">
                 <li><a href="{{ route('home') }}">Inicio</a></li>
                 <li><a href="{{ route('tienda') }}">Tienda</a></li>
                 <li><a href="{{ url('menu/drops') }}">Drops</a></li>
-                <li><a href="{{ url('menu/retail') }}">Retail</a></li>
+                <li><a href="{{ route('locations') }}" class="aux">Locations</a></li>
                 <li><a class="aux">Influencers</a></li>
             </ul>
             <span class="enlacesD">
