@@ -31,7 +31,9 @@
             </ul>
             <span class="enlacesD">
                 <img src="{{ asset('Img/PaginaPrincipal/share-alt-square_10470668.png') }}" alt="compartir">
-                <img src="{{ asset('Img/PaginaPrincipal/cart-arrow-down_9798256.png') }}" alt="cesta de compra">
+                <a href="{{ route('cart.show') }}">
+                    <img src="{{ asset('Img/PaginaPrincipal/cart-arrow-down_9798256.png') }}" alt="cesta de compra">
+                </a>
             </span>
         </nav>
     </div>

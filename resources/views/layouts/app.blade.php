@@ -12,7 +12,7 @@
         body {
             /*background-image: url('{{ asset("Img/PaginaPrincipal/ImagenTraslucida.jpg") }}');*/
             margin: 0;
-            padding-top: 180px;
+            padding-top: 120px;
             background-repeat: no-repeat;
             background-position: center ;
             background-size: cover;

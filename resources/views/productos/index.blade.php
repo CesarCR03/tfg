@@ -7,7 +7,6 @@
     <main>
         <div class="capaNavegador">
             <ul class="navegador">
-                {{-- Lógica para establecer la ruta "Todo" y el título dinámico --}}
                 @php
                     if (isset($currentCollectionId)) {
                         $todoRoute = route('coleccion', $currentCollectionId);
@@ -48,6 +47,7 @@
                         @endif
                     </li>
                     <li>·</li>
+
             @endforeach
         </div>
         <div class="capaTabla">

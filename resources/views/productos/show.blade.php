@@ -4,9 +4,9 @@
 
 @section('content')
     <main>
-        {{-- Flecha de retroceso - Usamos la ruta 'tienda' o 'coleccion' si es necesario --}}
+        {{-- Flecha de retroceso --}}
         <div class="flechaAtras">
-            <a href="{{ url()->previous() }}"> {{-- Usar url()->previous() es más flexible para volver al listado --}}
+            <a href="{{ url()->previous() }}">
                 <img src="{{ asset('Img/PaginaPrincipal/double-arrows_10420972.png') }}" alt="Atrás">
             </a>
         </div>
@@ -16,51 +16,59 @@
                 <tr>
                     {{-- COLUMNA 1: IMAGEN DEL PRODUCTO (Galería) --}}
                     <td colspan="1">
-                        {{-- La galería de imágenes de tu código original, adaptada a la tabla --}}
                         <div class="galeria-imagenes">
-                            @foreach($producto->imagenes as $imagen)
-                                {{-- Si quieres solo la primera imagen para el detalle: --}}
-                                @if ($loop->first)
-                                    <img src="{{ asset('storage/' . $imagen->URL) }}"
-                                         alt="Imagen principal de {{ $producto->Nombre }}">
-                                @endif
-                                {{-- Si quieres mostrar todas las imágenes: --}}
-                                {{-- <img src="{{ asset('storage/' . $imagen->URL) }}" alt="Imagen de {{ $producto->Nombre }}"> --}}
-                            @endforeach
+                            @if ($producto->imagenes->isNotEmpty())
+                                <img src="{{ asset('storage/' . $producto->imagenes->first()->URL) }}"
+                                     alt="Imagen principal de {{ $producto->Nombre }}">
+                            @endif
                         </div>
                     </td>
 
-                    {{-- COLUMNA 2: NOMBRE, DESCRIPCIÓN Y ACCIONES --}}
-                    <td class="dimensionesTexto" style="vertical-align: top;">
-                        {{-- Atributo: Nombre --}}
+                    {{-- COLUMNA 2: FORMULARIO DE COMPRA --}}
+                    <td class="dimensionesTexto product-detail-info">
                         <h1>{{ $producto->Nombre }}</h1>
 
-                        {{-- Atributo: Descripción --}}
                         <p>{{ $producto->Descripcion }}</p>
 
                         <br>
 
-                        {{-- Fila para precio, talla y botón de compra --}}
-                        <table>
-                            <tr>
-                                {{-- Precio --}}
-                                <td><span class="precio">{{ number_format($producto->Precio, 2) }} €</span></td>
+                        {{-- INICIO DEL FORMULARIO DEL CARRITO (SIN @csrf) --}}
+                        <form action="{{ route('cart.add') }}" method="POST">
+                            @csrf
+                            @method('POST') {{-- Se mantiene el método HTTP --}}
 
-                                {{-- Select Talla --}}
-                                <td>
-                                    <select name="talla" id="talla">
-                                        <option value="1">S</option>
-                                        <option value="2">M</option>
-                                        <option value="3">L</option>
-                                    </select>
-                                </td>
+                            {{-- Campo oculto para enviar el ID del producto --}}
+                            <input type="hidden" name="id_producto" value="{{ $producto->id_producto }}">
 
-                                {{-- Botón de Carrito (No funcional) --}}
-                                <td>
-                                    <input type="button" id="botonCompra" value="Añadir al carrito">
-                                </td>
-                            </tr>
-                        </table>
+                            <table class="product-form-table">
+                                <tr>
+                                    {{-- Precio --}}
+                                    <td><span class="precio">{{ number_format($producto->Precio, 2) }} €</span></td>
+
+                                    {{-- Select Talla --}}
+                                    <td>
+                                        <select name="talla" id="talla" required>
+                                            <option value="" disabled selected>Talla</option>
+                                            <option value="S">S</option>
+                                            <option value="M">M</option>
+                                            <option value="L">L</option>
+                                            <option value="XL">XL</option>
+                                        </select>
+                                    </td>
+
+                                    {{-- Cantidad --}}
+                                    <td>
+                                        <input type="number" name="cantidad" value="1" min="1" class="quantity-input" required>
+                                    </td>
+
+                                    {{-- Botón de Carrito --}}
+                                    <td>
+                                        <input type="submit" id="botonCompra" value="Añadir al carrito">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        {{-- FIN DEL FORMULARIO --}}
                     </td>
                 </tr>
             </table>

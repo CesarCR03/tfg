@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 .lato-regular {
-    font-family: "Lato", serif;
+    font-family: "Lato";/*Poppins */
     font-weight: 400;
     font-style: normal;
 }
@@ -146,11 +146,8 @@ img{
 }
 
 .enlacesD{
-    padding-right: 25px;
-}
-
-.enlacesD{
     justify-content: flex-end;
+    padding-right: 25px;
     gap: 10px;
     color: #fff;
 }
@@ -346,7 +343,188 @@ ul.navegador li{
     background-color: #3F86F5;
     color: white;
 }
+/* Carrito compras */
 
+.cart-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.cart-header-title {
+    color: #577343;
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 2.5em;
+    font-family: "Playfair Display", serif;
+    font-weight: 600;
+}
+
+/* Encabezados de Columna */
+.cart-column-headers {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px 10px 200px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+    color: #555;
+    text-transform: uppercase;
+}
+
+.header-producto { /* Nuevo selector para el producto */
+    width: 30%;
+    text-align: left;
+}
+.header-cantidad { width: 100px; text-align: center; }
+.header-total { width: 100px; text-align: right; }
+
+/* --- Estilos de la Tarjeta de Producto Individual --- */
+
+.cart-item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Bloque Imagen y Texto */
+.cart-item-details-block {
+    display: flex;
+    align-items: flex-start;
+    flex-grow: 1;
+}
+
+.cart-item-image {
+    width: 130px;
+    height: auto;
+    object-fit: cover;
+    margin-right: 30px;
+    border: 1px solid #ddd;
+}
+
+.cart-item-text-info {
+    padding-top: 10px;
+}
+
+.item-name-link {
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    font-size: 1.2em;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.item-price-unit, .item-talla-info {
+    margin-top: 5px;
+    color: #555;
+    font-size: 1em;
+}
+
+/* Columna de Acciones y Total */
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 30px;
+}
+
+/* Columna de Total por Línea */
+.cart-item-line-total {
+    font-weight: 600;
+    width: 100px;
+    text-align: right;
+    color: #333;
+}
+
+/* --- Controles de Cantidad (+ / -) --- */
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    height: 35px;
+    width: 100px;
+    overflow: hidden;
+}
+
+.qty-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 30px;
+    font-size: 1.2em;
+    color: #333;
+    padding: 0;
+    line-height: 1;
+}
+
+.qty-display {
+    text-align: center;
+    width: 40px;
+    font-weight: 600;
+    line-height: 35px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+/* Botón Quitar (Texto) */
+.remove-form {
+    width: 100px;
+    text-align: right;
+}
+
+.remove-text-btn {
+    background: none;
+    border: none;
+    color: #577343;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 0;
+}
+
+/* --- Resumen y Botón de Pago --- */
+
+.cart-summary-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 30px;
+    border-top: 1px solid #ccc;
+    margin-top: 30px;
+}
+
+.summary-details {
+    text-align: right;
+    margin-right: 30px;
+}
+
+.summary-total-text {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.summary-total-value {
+    font-weight: 900;
+    color: #577343;
+    font-size: 1.3em;
+}
+
+.checkout-btn {
+    background-color: #577343;
+    color: white;
+    padding: 15px 30px;
+    font-weight: bold;
+    font-size: 1.1em;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 /* Media queries */
 
 /* Media query para moviles */
@@ -513,6 +691,48 @@ ul.navegador li{
         height: 30vh;
     }
 
+    /* Carrito */
+    .cart-column-headers { display: none; }
+
+    .cart-item-card {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        padding: 15px 0;
+    }
+
+    .cart-item-details-block {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .cart-item-image {
+        width: 100px;
+        height: auto;
+    }
+
+    .cart-item-actions {
+        width: 100%;
+        justify-content: space-between;
+        padding-left: 130px;
+    }
+
+    .cart-item-line-total {
+        width: auto;
+    }
+
+    .remove-form {
+        width: auto;
+        text-align: left;
+    }
+
+    .cart-summary-footer {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .checkout-btn {
+        width: 100%;
+    }
 }
 
 /* TABLETS (601px - 1024px) */
@@ -653,5 +873,34 @@ ul.navegador li{
 
     .tienda:has(.item:nth-child(10):last-child) .item:last-child {
         grid-column: 2 / 3;
+    }
+
+    /* carrito */
+    .cart-container {
+        padding: 30px;
+    }
+
+    .cart-container h1 {
+        text-align: left; /* Alineación izquierda para tablet */
+    }
+
+    .cart-table th, .cart-table td {
+        padding: 12px 8px;
+        font-size: 0.95em;
+    }
+
+    .cart-summary {
+        text-align: right; /* Alineación derecha para tablet */
+    }
+
+    .cart-total-amount {
+        display: inline-block;
+        margin-right: 0;
+        font-size: 1.5em;
+    }
+
+    .checkout-btn {
+        width: auto;
+        margin-top: 0;
     }
 }
