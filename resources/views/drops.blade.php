@@ -24,26 +24,25 @@
             </div>
 
             {{-- COLUMNA 2 Y 3: GALERÍA Y MINIATURAS --}}
-            @if ($selectedCollection && $productos->isNotEmpty())
+            @if ($selectedCollection && $imagenes->isNotEmpty())
                 <div class="gallery-content-area">
 
                     {{-- IMAGEN PRINCIPAL --}}
                     <div class="main-image-view">
                         {{-- La imagen se carga con la URL del primer producto por defecto --}}
                         <img id="main-drop-image"
-                             src="{{ asset('storage/' . optional($productos->first()->imagenes->first())->URL) }}"
-                             alt="{{ $productos->first()->Nombre }}"
+                             src="{{ asset('storage/' . $imagenes->first()->URL) }}"
                              class="drop-main-img">
                     </div>
 
                     {{-- MINIATURAS (THUMBNAILS) --}}
                     <div class="thumbnails-grid-area">
                         <div class="thumbnails-grid">
-                            @foreach ($productos as $producto)
+                            @foreach ($imagenes as $imagen)
                                 <div class="thumbnail-item">
-                                    <img src="{{ asset('storage/' . optional($producto->imagenes->first())->URL) }}"
-                                         alt="{{ $producto->Nombre }}"
-                                         data-full-src="{{ asset('storage/' . optional($producto->imagenes->first())->URL) }}"
+                                    <img src="{{ asset('storage/' . $imagen->URL) }}"
+                                         alt="Miniatura de Lookbook"
+                                         data-full-src="{{ asset('storage/' . $imagen->URL) }}"
                                          class="thumbnail-img">
                                 </div>
                             @endforeach

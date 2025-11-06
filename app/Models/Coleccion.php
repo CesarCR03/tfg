@@ -33,4 +33,15 @@ class Coleccion extends Model
             'id_producto'         // Clave de Producto en la tabla pivote
         );
     }
+
+    public function imagenes()
+    {
+        return $this->belongsToMany(
+            Imagen::class,
+            'Coleccion_Imagen', // Tabla pivote
+            'id_coleccion',
+            'id_imagen'
+        )
+        ->orderBy('id_imagen', 'desc');
+    }
 }

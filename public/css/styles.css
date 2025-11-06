@@ -160,6 +160,11 @@ img{
     color: #fff;
 }
 
+.enlacesD a{
+    text-decoration: none;
+    font-weight: 500;
+    color: #05050a;
+}
 .enlacesD, .enlacesI{
     padding: 10px;
     display: flex;
@@ -188,6 +193,34 @@ img{
     align-items: flex-start;
 }
 
+.drops-menu-area ul{
+    list-style-type: none;
+}
+
+.drops-menu-area a {
+    text-decoration: none; /* Quitamos el subrayado por defecto */
+    color: #05050a;
+    font-weight: 600;
+    font-family: "Lato", serif;
+    opacity: 1; /* Opacidad completa por defecto */
+    padding: 3px 0;
+    display: block;
+    list-style-type: none;
+    /* Transición suave para el efecto */
+    transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.drops-menu-area a:hover {
+    opacity: 0.7; /* 1. Se vuelve un poco transparente */
+    text-decoration: underline; /* 2. Se subraya */
+
+    color: #4a5568;
+}
+.active-drop-link {
+    color: #577343;
+    font-weight: bold;
+    text-decoration: underline;
+}
 /* Columna 1: Menú */
 .drops-menu-area {
     flex: 0 0 250px;
@@ -338,7 +371,7 @@ ul.navegador li{
     color: #333;
 }
 
-.imagenesHover{
+/*.imagenesHover{
     transition: 0.5 ease;
 }
 

@@ -37,29 +37,23 @@ class HomeController extends Controller
      */
     public function drops($idColeccion = null)
     {
-        // 1. Obtener todas las colecciones para el menú lateral
         $allCollections = Coleccion::orderBy('id_coleccion', 'desc')->get();
 
-        // 2. Determinar la colección a mostrar (o la última si no se especifica)
-        // Usamos optional() para evitar errores si no hay colecciones
         $currentCollectionId = $idColeccion ?? optional($allCollections->first())->id_coleccion;
 
         $selectedCollection = null;
-        $productos = collect([]); // Colección vacía por defecto
+        $imagenes = collect([]); // Usaremos $imagenes en lugar de $productos
 
         if ($currentCollectionId) {
-            // Cargar la colección con sus productos e imágenes
-            $selectedCollection = Coleccion::with([
-                'productos' => function ($query) {
-                    $query->with('imagenes');
-                }
-            ])->find($currentCollectionId);
+            // CAMBIO DE LÓGICA: Cargar la relación 'imagenes()'
+            $selectedCollection = Coleccion::with('imagenes')->find($currentCollectionId);
 
-            // Extraer los productos para la galería
-            $productos = $selectedCollection ? $selectedCollection->productos : collect([]);
+            // Extraer las imágenes para la galería
+            $imagenes = $selectedCollection ? $selectedCollection->imagenes : collect([]);
         }
 
-        return view('drops', compact('allCollections', 'productos', 'currentCollectionId', 'selectedCollection'));
+        // Pasamos $imagenes a la vista
+        return view('drops', compact('allCollections', 'imagenes', 'currentCollectionId', 'selectedCollection'));
     }
 }
 
