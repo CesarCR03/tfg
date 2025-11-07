@@ -10,7 +10,39 @@
         <nav>
             <span class="enlacesI">
                 <span class="hamburg">☰</span>
-                <img src="{{ asset('Img/PaginaPrincipal/user_17740782.png') }}" alt="usuario">
+                @guest
+                    <a href="{{ route('login') }}" title="Iniciar Sesión">
+                        <img src="{{ asset('Img/PaginaPrincipal/user_17740782.png') }}" alt="Iniciar Sesión">
+                    </a>
+                @endguest
+
+                @auth
+                    <div class="profile-dropdown">
+
+                    {{-- Este es el icono que se ve siempre --}}
+                    <img src="{{ asset('Img/PaginaPrincipal/user_17740782.png') }}" alt="Mi cuenta" class="profile-icon">
+
+                    {{-- Este es el menú que aparece al pasar el ratón --}}
+                    <div class="dropdown-content">
+
+                        {{-- 1. Enlace a Mi Perfil --}}
+                        <a href="{{ route('profile.edit') }}">Mi Perfil</a>
+
+                        {{-- 2. Enlace a Admin (si es admin) --}}
+                        @if(Auth::user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" style="color: #e74c3c;">Panel Admin</a>
+                        @endif
+                        {{-- 3. Formulario de Cerrar Sesión --}}
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <a href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); this.closest('form').submit();">
+                               Cerrar Sesión
+                            </a>
+                        </form>
+                    </div>
+                    </div>
+                @endauth
                 <a href="{{ route('home') }}">
                     <img src="{{ asset('Img/PaginaPrincipal/world_16396755.png') }}" alt="cambiar idioma">
                 </a>

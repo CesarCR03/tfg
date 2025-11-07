@@ -1,0 +1,55 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    margin: 0;
+    background-color: #f4f7f6; /* Un fondo ligero para el área de contenido */
+}
+
+.admin-sidebar {
+    width: 220px;
+    background: #2c3e50; /* Azul oscuro */
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Sombra sutil */
+}
+
+.admin-sidebar h2 {
+    margin-top: 0;
+    color: #ecf0f1; /* Blanco ligero */
+    text-align: center;
+}
+
+.admin-sidebar nav {
+    margin-top: 30px;
+}
+
+.admin-sidebar a {
+    color: #ecf0f1; /* Blanco ligero */
+    text-decoration: none;
+    display: block;
+    padding: 12px 15px; /* Más padding */
+    border-radius: 4px; /* Bordes redondeados */
+    margin-bottom: 5px; /* Espacio entre enlaces */
+    transition: background 0.2s ease-in-out;
+}
+
+.admin-sidebar a:hover {
+    background: #34495e; /* Azul un poco más claro */
+}
+
+.admin-sidebar a.active {
+    background: #1abc9c; /* Un color de acento (verde) para el enlace activo */
+    color: white;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 30px;
+}
+
+.admin-content h1 {
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    color: #2c3e50;
+}

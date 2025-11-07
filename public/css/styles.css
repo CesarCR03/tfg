@@ -682,6 +682,52 @@ ul.navegador li{
     border-color: #577343; /* El borde aparece y es verde */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
+
+/* Icono usuarios y menu desplegable */
+/* Contenedor principal del icono y el menú */
+.profile-dropdown {
+    position: relative; /* Clave para el menú absoluto */
+    display: inline-block;
+}
+
+/* El icono de usuario */
+.profile-icon {
+    cursor: pointer; /* Indica que se puede hacer clic (aunque funcione con hover) */
+}
+
+/* El contenido del menú (oculto por defecto) */
+.dropdown-content {
+    display: none; /* Oculto hasta que se pasa el ratón */
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1001; /* Asegura que esté por encima de otros elementos */
+    right: 0; /* Lo alinea a la derecha del icono */
+}
+
+/* Estilos para los enlaces dentro del menú */
+.dropdown-content a,
+.dropdown-content form {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    font-family: "Lato", serif; /* Usamos la fuente de tu web */
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+/* Cambio de color al pasar el ratón por los enlaces */
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+/* La magia: Muestra el menú cuando se pasa el ratón por el contenedor */
+.profile-dropdown:hover .dropdown-content {
+    display: block;
+}
 /* Media queries */
 
 /* Media query para moviles */
@@ -1000,7 +1046,6 @@ ul.navegador li{
         object-fit: cover;
     }
 }
-
 /* TABLETS (601px - 1024px) */
 @media (min-width: 601px) and (max-width: 1024px) {
 

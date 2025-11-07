@@ -21,7 +21,6 @@ class Producto extends Model
         'Nombre',
         'Descripcion',
         'Precio',   // en euros (€), número decimal
-        'Stock'     // en unidades (u)
     ];
 
     /**
@@ -59,9 +58,10 @@ class Producto extends Model
         return $this->hasMany(Imagen::class, 'producto_id');
     }
 
-    /*public function producto()
+    public function tallas()
     {
-        return $this->belongsTo(Producto::class, 'producto_id');
-    }*/
+        // Un producto tiene muchas tallas/stocks
+        return $this->hasMany(ProductoStock::class, 'id_producto');
+    }
 }
 

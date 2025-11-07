@@ -20,7 +20,9 @@ class HomeController extends Controller
         $categorias = Categoria::all();
 
         // Cargar productos en stock (puedes ajustar el filtro o el número)
-        $productos = Producto::where('Stock', '>', 0)
+        $productos = Producto::whereHas('tallas', function ($query) {
+            $query->where('stock', '>', 0);
+        })
             ->with('imagenes')   // precargar imágenes
             ->take(6)            // mostrar solo 6
             ->get();

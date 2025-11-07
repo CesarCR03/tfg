@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Mi Tienda')</title>
-    <!-- CSS principal -->
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    <!-- Espacio para estilos adicionales -->
     @stack('styles')
     <style>
         body {
@@ -20,21 +18,15 @@
     </style>
 </head>
 <body>
-<!-- Header común -->
 @include('partials.header')
 
-<!-- Contenido dinámico -->
 <main>
     @yield('content')
 </main>
 
-<!-- Footer común -->
 @include('partials.footer')
 
-<!-- js principal -->
 <script src="{{ asset('js/TrabajoDIW.js') }}"></script>
-<!-- Espacio para scripts adicionales -->
 @stack('scripts')
 </body>
 </html>
-

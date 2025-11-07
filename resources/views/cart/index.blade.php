@@ -83,12 +83,17 @@
                 </div>
 
                 {{-- Resumen y Botón de Pago --}}
-                <div class="cart-summary-footer">
-                    <div class="summary-details">
-                        <p class="summary-total-text">Total: <span class="summary-total-value">€{{ number_format($totalGeneral, 2) }} EUR</span></p>
+                <form action="{{ route('order.process') }}" method="POST">
+                    @csrf
+                    <div class="cart-summary-footer">
+                        <div class="summary-details">
+                            <p class="summary-total-text">Total: <span class="summary-total-value">€{{ number_format($totalGeneral, 2) }} EUR</span></p>
+                        </div>
+
+                        {{-- El botón ahora es de tipo 'submit' --}}
+                        <button type="submit" class="checkout-btn">FINALIZAR COMPRA</button>
                     </div>
-                    <button class="checkout-btn">FINALIZAR COMPRA</button>
-                </div>
+                </form>
             @endif
         </div>
     </main>

@@ -24,7 +24,7 @@ class ProductoController extends Controller
 
     public function show($id)
     {
-        $producto = Producto::with('imagenes')->findOrFail($id);
+        $producto = Producto::with('imagenes','tallas')->findOrFail($id);
         return view('productos.show', compact('producto'));
     }
 
@@ -72,4 +72,5 @@ class ProductoController extends Controller
         // Pasamos el ID de la colección para mantener el contexto en la vista
         return $this->returnViewWithContext($productos, $idColeccion);
     }
+
 }

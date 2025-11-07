@@ -36,9 +36,23 @@
 
                         <select name="talla" id="talla" class="product-talla-select" required>
                             <option value="" disabled selected>Talla</option>
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
+
+                            {{-- Iteramos sobre las tallas que cargamos desde el controlador --}}
+                            @foreach ($producto->tallas as $tallaStock)
+
+                                {{-- Mostramos la talla SOLO SI hay stock --}}
+                                @if ($tallaStock->stock > 0)
+                                    <option value="{{ $tallaStock->talla }}">
+                                        {{ $tallaStock->talla }}
+                                    </option>
+                                @else
+                                    {{-- Opcional: mostrarla como deshabilitada --}}
+                                    <option value="{{ $tallaStock->talla }}" disabled>
+                                        {{ $tallaStock->talla }} (Agotado)
+                                    </option>
+                                @endif
+
+                            @endforeach
                         </select>
                     </div>
 

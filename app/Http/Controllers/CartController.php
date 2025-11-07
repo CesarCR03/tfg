@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cesta;
-use App\Models\Producto; // Necesario para referencias
+use App\Models\Producto;
+use App\Models\ProductoStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,32 +51,58 @@ class CartController extends Controller
             'talla' => 'required|string|max:10',
         ]);
 
-        $cesta = $this->getOrCreateCart();
         $productoId = $request->id_producto;
         $cantidad = $request->cantidad;
         $talla = $request->talla;
 
-        // El 'wherePivot' es la clave para manejar un carrito con diferentes tallas
+        // --- INICIO DE LA NUEVA LÓGICA DE STOCK ---
+        // 1. Encontrar la variante de stock específica
+        $varianteStock = ProductoStock::where('id_producto', $productoId)
+            ->where('talla', $talla)
+            ->first();
+
+        // 2. Comprobar si la variante existe
+        if (!$varianteStock) {
+            // 'back()' redirige al usuario a la página del producto
+            return redirect()->back()->with('error', 'Producto o talla no encontrado.');
+        }
+
+        // 3. Comprobar si hay stock suficiente para la cantidad solicitada
+        if ($varianteStock->stock < $cantidad) {
+            return redirect()->back()->with('error', 'No hay suficiente stock para esa talla. Solo quedan: ' . $varianteStock->stock);
+        }
+
+        $cesta = $this->getOrCreateCart();
+
+        // 4. Comprobar si el producto (con esa talla) ya está en el carrito
         $existingItem = $cesta->productos()
             ->wherePivot('id_producto', $productoId)
             ->wherePivot('talla', $talla)
             ->first();
 
         if ($existingItem) {
-            // Si el producto Y la talla ya existen, actualiza la cantidad
+            // 5. Si ya existe, comprobar que la nueva cantidad total no supere el stock
             $newQuantity = $existingItem->pivot->cantidad + $cantidad;
+
+            if ($varianteStock->stock < $newQuantity) {
+                // 'route('cart.show')' redirige al carrito
+                return redirect()->route('cart.show')->with('error', 'No puedes añadir más. El stock máximo para esta talla (' . $talla . ') es: ' . $varianteStock->stock);
+            }
+
+            // Si hay stock, actualiza la cantidad
             $cesta->productos()->updateExistingPivot($productoId, [
                 'cantidad' => $newQuantity
-            ], false); // El 'false' es para indicar que las claves pivote son las por defecto
+            ], false);
+
         } else {
-            // Si no existe, lo adjunta a la cesta
+            // Si no existe, lo adjunta (ya comprobamos el stock al inicio)
             $cesta->productos()->attach($productoId, [
                 'cantidad' => $cantidad,
                 'talla' => $talla
             ]);
         }
+        // --- FIN DE LA NUEVA LÓGICA DE STOCK ---
 
-        // Redirige al usuario al carrito (necesitas definir esta ruta)
         return redirect()->route('cart.show')->with('success', 'Producto agregado al carrito!');
     }
 
@@ -94,21 +121,30 @@ class CartController extends Controller
         $talla = $request->talla;
         $cantidad = $request->cantidad;
 
-        if ($cantidad > 0) {
-            // Actualizar la cantidad del producto y talla específicos
-            $cesta->productos()->updateExistingPivot($productoId, [
-                'cantidad' => $cantidad
-            ], false);
-
-            $message = 'Cantidad actualizada.';
-        } else {
-            // Si la cantidad es 0, lo eliminamos (como medida de seguridad/usabilidad)
-            $cesta->productos()->wherePivot('id_producto', $productoId)
-                ->wherePivot('talla', $talla)
-                ->detach($productoId);
-
-            $message = 'Producto eliminado de la cesta.';
+        if ($cantidad == 0) {
+            // Si la cantidad es 0, simplemente lo eliminamos
+            return $this->removeFromCart($productoId, $talla);
         }
+
+        // --- INICIO DE LA NUEVA LÓGICA DE STOCK ---
+        // 1. Encontrar la variante de stock
+        $varianteStock = ProductoStock::where('id_producto', $productoId)
+            ->where('talla', $talla)
+            ->first();
+
+        // 2. Comprobar si la cantidad deseada supera el stock disponible
+        if (!$varianteStock || $varianteStock->stock < $cantidad) {
+            $stockMaximo = $varianteStock ? $varianteStock->stock : 0;
+            return redirect()->route('cart.show')->with('error', 'No hay suficiente stock. Máximo disponible para la talla ' . $talla . ': ' . $stockMaximo);
+        }
+
+        // 3. Si hay stock, actualizamos
+        $cesta->productos()->updateExistingPivot($productoId, [
+            'cantidad' => $cantidad
+        ], false);
+
+        $message = 'Cantidad actualizada.';
+        // --- FIN DE LA NUEVA LÓGICA DE STOCK ---
 
         return redirect()->route('cart.show')->with('success', $message);
     }
