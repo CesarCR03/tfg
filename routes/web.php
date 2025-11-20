@@ -51,5 +51,12 @@ Route::middleware(['auth'])
     ->group(function () {
 
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-        // Aquí añadiremos más rutas de admin...
+        Route::get('/productos', [AdminController::class, 'productosIndex'])->name('productos.index');
+        // 1. Mostrar el formulario
+        Route::get('/productos/crear', [AdminController::class, 'productoCreate'])->name('productos.create');
+        // 2. Guardar los datos (POST)
+        Route::post('/productos', [AdminController::class, 'productoStore'])->name('productos.store');
+        Route::get('/colecciones/crear', [AdminController::class, 'coleccionCreate'])->name('colecciones.create');
+        Route::post('/colecciones', [AdminController::class, 'coleccionStore'])->name('colecciones.store');
     });
+

@@ -10,19 +10,18 @@
 <body>
 
 <div class="admin-sidebar">
-    <h2>Admin TFG</h2>
+    <h2>Administrador</h2>
     <nav>
-        {{--
-            Comprobamos si la ruta activa es 'admin.dashboard'
-            para ponerle la clase 'active' que definimos en el CSS
-        --}}
+        {{-- Enlace Dashboard --}}
         <a href="{{ route('admin.dashboard') }}"
-           class="{{ Route::is('admin.dashboard') ? 'active' : '' }}">
+           class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
             Dashboard
         </a>
 
-        {{-- <a href="#">Gestionar Productos</a> --}}
-        {{-- <a href="#">Ver Usuarios</a> --}}
+        <a href="{{ route('admin.productos.index') }}"
+           class="{{ request()->routeIs('admin.productos.*') ? 'active' : '' }}">
+            Productos
+        </a>
 
         <hr style="opacity: 0.2; border: 0; border-top: 1px solid #567; margin: 20px 0;">
 

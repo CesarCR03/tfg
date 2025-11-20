@@ -1,0 +1,56 @@
+@extends('admin.layouts.admin')
+
+@section('title', 'Gestión de Productos')
+
+@section('content')
+    <div style="margin-bottom: 20px; text-align: right;">
+        <a href="{{route('admin.productos.create')}}" style="background-color: #27ae60; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            + Nuevo Producto
+        </a>
+    </div>
+
+    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+            <tr style="background-color: #f8f9fa; text-align: left;">
+                <th style="padding: 12px; border-bottom: 2px solid #ddd;">ID</th>
+                <th style="padding: 12px; border-bottom: 2px solid #ddd;">Imagen</th>
+                <th style="padding: 12px; border-bottom: 2px solid #ddd;">Nombre</th>
+                <th style="padding: 12px; border-bottom: 2px solid #ddd;">Precio</th>
+                <th style="padding: 12px; border-bottom: 2px solid #ddd;">Stock Total</th>
+                <th style="padding: 12px; border-bottom: 2px solid #ddd;">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($productos as $producto)
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px;">{{ $producto->id_producto }}</td>
+                    <td style="padding: 12px;">
+                        @if($producto->imagenes->isNotEmpty())
+                            <img src="{{ asset('storage/' . $producto->imagenes->first()->URL) }}"
+                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                        @else
+                            <span style="color: #ccc;">Sin img</span>
+                        @endif
+                    </td>
+                    <td style="padding: 12px;"><strong>{{ $producto->Nombre }}</strong></td>
+                    <td style="padding: 12px;">{{ number_format($producto->Precio, 2) }}€</td>
+                    <td style="padding: 12px;">
+                        {{-- Sumamos el stock de todas las tallas --}}
+                        {{ $producto->tallas->sum('stock') }} u.
+                    </td>
+                    <td style="padding: 12px;">
+                        <a href="#" style="color: #3498db; text-decoration: none; margin-right: 10px;">Editar</a>
+                        <a href="#" style="color: #e74c3c; text-decoration: none;">Borrar</a>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+
+        {{-- Paginación --}}
+        <div style="margin-top: 20px;">
+            {{ $productos->links() }}
+        </div>
+    </div>
+@endsection

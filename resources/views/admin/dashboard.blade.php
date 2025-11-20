@@ -1,4 +1,3 @@
-<?php
 {{-- Le decimos que use nuestra plantilla de admin --}}
 @extends('admin.layouts.admin')
 
