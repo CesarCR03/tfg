@@ -13,12 +13,21 @@
 }
 
 header {
-    position: fixed;
+    position: fixed;  /* <-- ESTO ES LO IMPORTANTE*/
     width: 100%;
     top: 0;
     left: 0;
     z-index: 1000;
 }
+
+main header {
+    position: static; /* Vuelve a su posición normal */
+    width: auto;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
 html, body {
     /* Asegura que el contenedor principal tome 100% del viewport */
     height: 100%;
@@ -119,6 +128,14 @@ nav {
     align-items: center;
 }
 
+.enlacesP {
+    flex: 0 0 auto; /* No se estira, ocupa lo que necesita */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
 .enlacesP a {
     margin: 0 10px;
     text-decoration: none;
@@ -138,24 +155,22 @@ nav {
     height: 50px;
     width: 55px;
 }
-
+.header-logo{
+    height: 40px;
+    width: 40px;
+}
 img{
     height: 30px;
     width: 30px;
 }
 
-.enlacesI{
+.enlacesI {
     justify-content: flex-start;
     gap: 10px;
 }
 
-.enlacesI{
-    padding-left: 25px;
-}
-
 .enlacesD{
     justify-content: flex-end;
-    padding-right: 25px;
     gap: 10px;
     color: #fff;
 }
@@ -165,14 +180,45 @@ img{
     font-weight: 500;
     color: #05050a;
 }
-.enlacesD, .enlacesI{
+.enlacesI, .enlacesD {
+    flex: 1;
+    flex-basis: 0;      /* Clave para el centrado */
+    min-width: 0;
     padding: 10px;
     display: flex;
-    flex:1;
+    align-items: center;
 }
 
-.colecciones{
-    text-align: center;
+.footer-center {
+    flex: 0 0 auto; /* No se estira ni se encoge */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px; /* O el ancho que quieras reservar para el logo */
+}
+
+footer nav .enlacesI,
+footer nav .enlacesD {
+    padding-top: 40px;
+    flex: 1;        /* Ocupan todo el espacio disponible */
+    flex-basis: 0;  /* Empiezan midiendo 0 para repartir equitativamente */
+    min-width: 0;
+}
+
+footer nav .enlacesI {
+    justify-content: flex-start; /* Iconos a la izquierda */
+}
+
+footer nav .enlacesD {
+    justify-content: flex-end; /* Texto a la derecha */
+}
+
+.colecciones {
+    display: flex;           /* Activamos Flexbox */
+    flex-direction: column;  /* Ponemos los elementos uno debajo de otro */
+    align-items: center;     /* Centramos horizontalmente */
+    width: 100%;             /* Aseguramos que ocupe todo el ancho */
+    gap: 20px;               /* Añadimos espacio entre las imágenes (opcional) */
 }
 
 .colecciones img{
@@ -272,7 +318,8 @@ img{
 
 .thumbnail-img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
 }
 /* Tienda */
 
@@ -310,16 +357,28 @@ img{
 }
 
 /* Colecciones */
-.capaNavegador{
-    text-align: center;
+/* --- FILTRO DE PRODUCTOS (Centrado con Flexbox) --- */
+.capaNavegador {
+    display: flex;            /* Activamos Flexbox */
+    justify-content: center;  /* Centramos el bloque entero horizontalmente */
+    width: 100%;              /* Aseguramos que ocupe todo el ancho */
+    margin-top: 20px;         /* Un poco de aire arriba */
+    margin-bottom: 20px;      /* Un poco de aire abajo */
 }
 
-.navegador{
-    align-content: center;
-
+ul.navegador {
+    display: flex;            /* La lista también usa Flexbox */
+    justify-content: center;  /* Centra los elementos (li) dentro de la lista */
+    align-items: center;      /* Alinea verticalmente por si hay diferencias de altura */
+    flex-wrap: wrap;          /* Permite que baje a dos líneas en móviles si no cabe */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    gap: 5px;                 /* Espacio uniforme entre elementos */
 }
-ul.navegador li{
-    display: inline;
+
+ul.navegador li {
+    display: block;           /* Comportamiento de bloque para el flex */
 }
 
 .navegador li a{
@@ -440,6 +499,7 @@ ul.navegador li{
     border: 1px solid #ccc;
     border-radius: 3px;
     font-size: 1em;
+    min-width: 70px;
 }
 
 /* Botón Añadir al Carrito (Ajustado para ser un bloque grande) */
@@ -790,8 +850,20 @@ ul.navegador li{
         background-size: cover;
     }
 
-    .enlacesP{
-        display: none;
+    /* Contenedor del menú central */
+    .enlacesP {
+        display: flex;            /* Alinea los elementos en fila */
+        align-items: center;      /* Los centra verticalmente */
+        justify-content: center;  /* Los centra horizontalmente */
+        gap: 20px;                /* Espacio entre cada enlace */
+    }
+
+    /* Estilo específico para el Logo Central */
+    .header-logo {
+        width: 50px !important;   /* Un poco más grande que los iconos de usuario */
+        height: 50px !important;  /* Mantenemos la proporción */
+        object-fit: contain;
+        display: block;           /* Corrige comportamientos extraños de línea */
     }
 
     .colecciones img {

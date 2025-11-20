@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Pedido;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,8 +16,15 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        // Obtener los pedidos del usuario ordenados por fecha
+        $pedidos = Pedido::where('user_id', $request->user()->id)
+            ->with('detalles') // Necesitaremos crear esta relación en el Modelo Pedido
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('profile.edit', [
             'user' => $request->user(),
+            'pedidos' => $pedidos, // <-- Pasamos la variable
         ]);
     }
 
