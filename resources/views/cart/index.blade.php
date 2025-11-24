@@ -82,18 +82,69 @@
                     @endforeach
                 </div>
 
-                {{-- Resumen y Botón de Pago --}}
-                <form action="{{ route('order.process') }}" method="POST">
-                    @csrf
-                    <div class="cart-summary-footer">
-                        <div class="summary-details">
-                            <p class="summary-total-text">Total: <span class="summary-total-value">€{{ number_format($totalGeneral, 2) }} EUR</span></p>
+                <div class="cart-summary">
+
+                    {{-- IZQUIERDA: CUPONES --}}
+                    <div class="coupon-area">
+                        <h4 style="margin-top: 0; margin-bottom: 10px; text-transform: uppercase; font-size: 0.9em; color: #888;">Código Promocional</h4>
+
+                        @if(session()->has('cupon'))
+                            <div class="coupon-active">
+                                <span><strong>{{ session('cupon')['codigo'] }}</strong> aplicado</span>
+                                <form action="{{ route('cart.coupon.remove') }}" method="POST" style="margin:0;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" style="background:none;border:none;color:#5d6d39;cursor:pointer;font-weight:bold;font-size:1.2em;">&times;</button>
+                                </form>
+                            </div>
+                        @else
+                            <form action="{{ route('cart.coupon') }}" method="POST" class="coupon-form">
+                                @csrf
+                                <input type="text" name="codigo" class="coupon-input" placeholder="Introduce tu código" required>
+                                <button type="submit" class="btn-apply-coupon">Aplicar</button>
+                            </form>
+                        @endif
+
+                        {{-- Mensajes --}}
+                        @if(session('error'))
+                            <p style="color: #e74c3c; font-size: 13px; margin-top: 8px;">{{ session('error') }}</p>
+                        @endif
+                        @if(session('success'))
+                            <p style="color: #5d6d39; font-size: 13px; margin-top: 8px;">{{ session('success') }}</p>
+                        @endif
+                    </div>
+
+
+                    {{-- DERECHA: TOTALES Y BOTÓN --}}
+                    <div class="totals-area">
+
+                        {{-- Detalles pequeños --}}
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span>{{ number_format($subtotal, 2) }}€</span>
                         </div>
 
-                        {{-- El botón ahora es de tipo 'submit' --}}
-                        <button type="submit" class="checkout-btn">FINALIZAR COMPRA</button>
+                        @if($descuento > 0)
+                            <div class="summary-row discount">
+                                <span>Descuento ({{ session('cupon')['codigo'] }}):</span>
+                                <span>-{{ number_format($descuento, 2) }}€</span>
+                            </div>
+                        @endif
+
+                        {{-- Total Grande y Botón --}}
+                        <div class="summary-total">
+                            <span>Total:</span>
+                            <span>{{ number_format($total, 2) }}€</span>
+                        </div>
+
+                        <form action="{{ route('order.process') }}" method="POST" style="width: 100%; text-align: right;">
+                            @csrf
+                            <button type="submit" class="btn-checkout">
+                                Finalizar Compra
+                            </button>
+                        </form>
                     </div>
-                </form>
+                </div>
             @endif
         </div>
     </main>

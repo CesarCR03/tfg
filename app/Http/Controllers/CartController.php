@@ -5,44 +5,54 @@ namespace App\Http\Controllers;
 use App\Models\Cesta;
 use App\Models\Producto;
 use App\Models\ProductoStock;
+use App\Models\Cupon; // <--- IMPORTANTE: No olvides importar el modelo
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    /**
-     * Función auxiliar para obtener o crear la Cesta basada en el usuario o la sesión.
-     */
     protected function getOrCreateCart()
     {
-        // 1. Usuario autenticado
         if (Auth::check()) {
             return Cesta::firstOrCreate(['user_id' => Auth::id()]);
         }
-
-        // 2. Usuario invitado (usando ID de sesión)
         $sessionId = session()->getId();
         return Cesta::firstOrCreate(['session_id' => $sessionId, 'user_id' => null]);
     }
 
-
     /**
-     * Muestra la página principal del carrito.
+     * Muestra la página principal del carrito con CÁLCULOS DE PRECIO.
      */
     public function showCart()
     {
         $cesta = $this->getOrCreateCart();
-
-        // Carga la cesta con los productos y sus datos pivote
         $cesta->load('productos');
 
-        // Necesitas crear esta vista: resources/views/cart/index.blade.php
-        return view('cart.index', compact('cesta'));
+        // 1. Calcular Subtotal (Suma de Precio * Cantidad de cada producto)
+        $subtotal = $cesta->productos->sum(function($producto) {
+            return $producto->Precio * $producto->pivot->cantidad;
+        });
+
+        // 2. Calcular Descuento (Si hay cupón en sesión)
+        $descuento = 0;
+        $cupon = session()->get('cupon'); // Recuperamos datos de la sesión
+
+        if ($cupon) {
+            if ($cupon['tipo'] === 'porcentaje') {
+                $descuento = $subtotal * ($cupon['valor'] / 100);
+            } else {
+                // Tipo 'fijo'
+                $descuento = $cupon['valor'];
+            }
+        }
+
+        // 3. Calcular Total Final (Evitando negativos)
+        $total = max(0, $subtotal - $descuento);
+
+        // Pasamos todas las variables a la vista
+        return view('cart.index', compact('cesta', 'subtotal', 'descuento', 'total'));
     }
 
-    /**
-     * Agrega un producto a la cesta o actualiza la cantidad.
-     */
     public function addToCart(Request $request)
     {
         $request->validate([
@@ -55,109 +65,122 @@ class CartController extends Controller
         $cantidad = $request->cantidad;
         $talla = $request->talla;
 
-        // --- INICIO DE LA NUEVA LÓGICA DE STOCK ---
-        // 1. Encontrar la variante de stock específica
         $varianteStock = ProductoStock::where('id_producto', $productoId)
             ->where('talla', $talla)
             ->first();
 
-        // 2. Comprobar si la variante existe
         if (!$varianteStock) {
-            // 'back()' redirige al usuario a la página del producto
             return redirect()->back()->with('error', 'Producto o talla no encontrado.');
         }
 
-        // 3. Comprobar si hay stock suficiente para la cantidad solicitada
         if ($varianteStock->stock < $cantidad) {
-            return redirect()->back()->with('error', 'No hay suficiente stock para esa talla. Solo quedan: ' . $varianteStock->stock);
+            return redirect()->back()->with('error', 'No hay suficiente stock. Solo quedan: ' . $varianteStock->stock);
         }
 
         $cesta = $this->getOrCreateCart();
 
-        // 4. Comprobar si el producto (con esa talla) ya está en el carrito
         $existingItem = $cesta->productos()
             ->wherePivot('id_producto', $productoId)
             ->wherePivot('talla', $talla)
             ->first();
 
         if ($existingItem) {
-            // 5. Si ya existe, comprobar que la nueva cantidad total no supere el stock
             $newQuantity = $existingItem->pivot->cantidad + $cantidad;
 
             if ($varianteStock->stock < $newQuantity) {
-                // 'route('cart.show')' redirige al carrito
-                return redirect()->route('cart.show')->with('error', 'No puedes añadir más. El stock máximo para esta talla (' . $talla . ') es: ' . $varianteStock->stock);
+                return redirect()->route('cart.show')->with('error', 'Stock máximo alcanzado (' . $varianteStock->stock . ').');
             }
 
-            // Si hay stock, actualiza la cantidad
             $cesta->productos()->updateExistingPivot($productoId, [
                 'cantidad' => $newQuantity
             ], false);
 
         } else {
-            // Si no existe, lo adjunta (ya comprobamos el stock al inicio)
             $cesta->productos()->attach($productoId, [
                 'cantidad' => $cantidad,
                 'talla' => $talla
             ]);
         }
-        // --- FIN DE LA NUEVA LÓGICA DE STOCK ---
 
         return redirect()->route('cart.show')->with('success', 'Producto agregado al carrito!');
     }
 
-    // Placeholder para futuras funciones
     public function updateCart(Request $request)
     {
-        // Validar los campos esenciales
         $request->validate([
             'id_producto' => 'required|exists:Producto,id_producto',
             'talla' => 'required|string|max:10',
-            'cantidad' => 'required|integer|min:0', // Permite 0 para eliminar
+            'cantidad' => 'required|integer|min:0',
         ]);
 
-        $cesta = $this->getOrCreateCart();
         $productoId = $request->id_producto;
         $talla = $request->talla;
         $cantidad = $request->cantidad;
 
         if ($cantidad == 0) {
-            // Si la cantidad es 0, simplemente lo eliminamos
             return $this->removeFromCart($productoId, $talla);
         }
 
-        // --- INICIO DE LA NUEVA LÓGICA DE STOCK ---
-        // 1. Encontrar la variante de stock
         $varianteStock = ProductoStock::where('id_producto', $productoId)
             ->where('talla', $talla)
             ->first();
 
-        // 2. Comprobar si la cantidad deseada supera el stock disponible
         if (!$varianteStock || $varianteStock->stock < $cantidad) {
             $stockMaximo = $varianteStock ? $varianteStock->stock : 0;
-            return redirect()->route('cart.show')->with('error', 'No hay suficiente stock. Máximo disponible para la talla ' . $talla . ': ' . $stockMaximo);
+            return redirect()->route('cart.show')->with('error', 'Stock insuficiente. Máximo: ' . $stockMaximo);
         }
 
-        // 3. Si hay stock, actualizamos
+        $cesta = $this->getOrCreateCart();
         $cesta->productos()->updateExistingPivot($productoId, [
             'cantidad' => $cantidad
         ], false);
 
-        $message = 'Cantidad actualizada.';
-        // --- FIN DE LA NUEVA LÓGICA DE STOCK ---
-
-        return redirect()->route('cart.show')->with('success', $message);
+        return redirect()->route('cart.show')->with('success', 'Cantidad actualizada.');
     }
 
     public function removeFromCart($idProducto, $talla)
     {
         $cesta = $this->getOrCreateCart();
 
-        // Elimina el registro de la tabla pivote que coincida con el producto y la talla
         $cesta->productos()->wherePivot('id_producto', $idProducto)
             ->wherePivot('talla', $talla)
-            ->detach($idProducto); // El detach borra la relación
+            ->detach($idProducto);
 
-        return redirect()->route('cart.show')->with('success', 'Producto eliminado de la cesta.');
+        return redirect()->route('cart.show')->with('success', 'Producto eliminado.');
+    }
+
+    // --- NUEVAS FUNCIONES PARA CUPONES ---
+
+    public function applyCoupon(Request $request)
+    {
+        $request->validate(['codigo' => 'required|string']);
+
+        $codigo = $request->input('codigo');
+        $cupon = Cupon::where('codigo', $codigo)->first();
+
+        // Verificar si existe y si es válido (usando el método del modelo o comprobando fecha manualmente)
+        if (!$cupon) {
+            return back()->with('error', 'El cupón no existe.');
+        }
+
+        // Si tienes el método esValido() en el modelo úsalo, si no, comprueba la fecha aquí:
+        if ($cupon->fecha_caducidad && $cupon->fecha_caducidad < now()) {
+            return back()->with('error', 'El cupón ha caducado.');
+        }
+
+        // Guardar en sesión
+        session()->put('cupon', [
+            'codigo' => $cupon->codigo,
+            'tipo' => $cupon->tipo,
+            'valor' => $cupon->valor,
+        ]);
+
+        return back()->with('success', 'Cupón ' . $codigo . ' aplicado correctamente.');
+    }
+
+    public function removeCoupon()
+    {
+        session()->forget('cupon');
+        return back()->with('success', 'Cupón eliminado.');
     }
 }

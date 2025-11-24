@@ -31,7 +31,8 @@ Route::post('/carrito/add', [CartController::class, 'addToCart'])->name('cart.ad
 Route::delete('/carrito/remove/{idProducto}/{talla}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::patch('/carrito/update', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/checkout/process', [OrderController::class, 'processOrder'])->name('order.process');
-
+Route::post('/carrito/cupon', [CartController::class, 'applyCoupon'])->name('cart.coupon');
+Route::delete('/carrito/cupon', [CartController::class, 'removeCoupon'])->name('cart.coupon.remove'); // Para quitarlo
 /* Rutas creadas por Breeze */
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -70,5 +71,14 @@ Route::middleware(['auth'])
         // --- RUTAS DE EDICIÓN DE COLECCIONES ---
         Route::get('/colecciones/{id}/editar', [AdminController::class, 'coleccionEdit'])->name('colecciones.edit');
         Route::put('/colecciones/{id}', [AdminController::class, 'coleccionUpdate'])->name('colecciones.update');
+        // --- GESTIÓN DE CUPONES ---
+        Route::get('/cupones', [AdminController::class, 'cuponesIndex'])->name('cupones.index');
+        Route::get('/cupones/crear', [AdminController::class, 'cuponCreate'])->name('cupones.create');
+        Route::post('/cupones', [AdminController::class, 'cuponStore'])->name('cupones.store');
+        Route::delete('/cupones/{id}', [AdminController::class, 'cuponDestroy'])->name('cupones.destroy');
+        Route::get('/cupones/{id}/editar', [AdminController::class, 'cuponEdit'])->name('cupones.edit');
+        Route::put('/cupones/{id}', [AdminController::class, 'cuponUpdate'])->name('cupones.update');
+        //Cupon gmail
+        Route::post('/cupones/{id}/enviar', [AdminController::class, 'enviarCuponEmail'])->name('cupones.send');
     });
 

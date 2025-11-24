@@ -29,6 +29,11 @@
             Colecciones
         </a>
 
+        <a href="{{ route('admin.cupones.index') }}"
+           class="{{ request()->routeIs('admin.cupones.*') ? 'active' : '' }}">
+            Cupones
+        </a>
+
         <hr style="opacity: 0.2; border: 0; border-top: 1px solid #567; margin: 20px 0;">
 
         <a href="{{ route('home') }}" target="_blank">Ver Tienda</a>

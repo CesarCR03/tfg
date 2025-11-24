@@ -12,6 +12,10 @@ use App\Models\ProductoStock;
 use App\Models\Imagen;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Models\Cupon;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EnviarCupon;
 
 class AdminController extends Controller
 {
@@ -356,5 +360,108 @@ class AdminController extends Controller
             DB::rollBack();
             return back()->withInput()->with('error', 'Error: ' . $e->getMessage());
         }
+    }
+    // --- GESTIÓN DE CUPONES ---
+
+    public function cuponesIndex()
+    {
+        $cupones = Cupon::orderBy('id', 'desc')->paginate(10);
+        return view('admin.cupones.index', compact('cupones'));
+    }
+
+    public function cuponCreate()
+    {
+        return view('admin.cupones.create');
+    }
+
+    public function cuponStore(Request $request)
+    {
+        $request->validate([
+            'codigo' => [
+                'required',
+                'string',
+                'max:20',
+                // ERROR ESTABA AQUÍ: Al crear, no hay ID que ignorar.
+                // Solo verificamos que sea único en la tabla.
+                'unique:cupones,codigo',
+                'regex:/^[a-zA-Z0-9]+$/'
+            ],
+            'tipo' => 'required|in:fijo,porcentaje',
+            'valor' => 'required|numeric|min:0',
+            'fecha_caducidad' => 'nullable|date|after:today',
+        ],
+            [
+                'codigo.regex' => 'El código no puede contener acentos, espacios ni caracteres especiales.',
+                'codigo.unique' => 'Este código de cupón ya está en uso.'
+            ]);
+
+        Cupon::create([
+            'codigo' => strtoupper($request->codigo),
+            'tipo' => $request->tipo,
+            'valor' => $request->valor,
+            'fecha_caducidad' => $request->fecha_caducidad,
+        ]);
+
+        return redirect()->route('admin.cupones.index')->with('success', 'Cupón creado correctamente.');
+    }
+
+    public function cuponDestroy($id)
+    {
+        $cupon = Cupon::findOrFail($id);
+        $cupon->delete();
+        return back()->with('success', 'Cupón eliminado.');
+    }
+
+    public function cuponEdit($id)
+    {
+        $cupon = Cupon::findOrFail($id);
+        return view('admin.cupones.edit', compact('cupon'));
+    }
+
+    public function cuponUpdate(Request $request, $id)
+    {
+        $cupon = Cupon::findOrFail($id);
+
+        $request->validate([
+            // unique: tabla, columna, id_a_ignorar -> Para que no te diga que el código ya existe si es el propio
+            // regex: Solo permite letras de la A a la Z (sin acentos) y números
+            'codigo' => [
+                'required',
+                'string',
+                'max:20',
+                'unique:cupones,codigo,' . $cupon->id,
+                'regex:/^[a-zA-Z0-9]+$/'
+            ],
+            'tipo' => 'required|in:fijo,porcentaje',
+            'valor' => 'required|numeric|min:0',
+            'fecha_caducidad' => 'nullable|date', // Quitamos 'after:today' para permitir editar un cupón antiguo sin obligar a cambiar fecha
+        ], [
+            'codigo.regex' => 'El código no puede contener acentos, espacios ni caracteres especiales.',
+            'codigo.unique' => 'Este código de cupón ya está en uso.'
+        ]);
+
+        $cupon->update([
+            'codigo' => strtoupper($request->codigo), // Aseguramos mayúsculas
+            'tipo' => $request->tipo,
+            'valor' => $request->valor,
+            'fecha_caducidad' => $request->fecha_caducidad,
+        ]);
+
+        return redirect()->route('admin.cupones.index')->with('success', 'Cupón actualizado correctamente.');
+    }
+
+    public function enviarCuponEmail($id)
+    {
+        $cupon = Cupon::findOrFail($id);
+
+        // Obtenemos todos los usuarios (en una app real se usarían Colas/Queues para no bloquear)
+        $usuarios = User::all();
+
+        foreach ($usuarios as $usuario) {
+            // Enviamos el correo a cada uno
+            Mail::to($usuario->email)->send(new EnviarCupon($cupon));
+        }
+
+        return back()->with('success', 'Cupón enviado a ' . $usuarios->count() . ' usuarios correctamente.');
     }
 }
