@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador - @yield('title')</title>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-
 </head>
 <body>
 
@@ -18,9 +17,16 @@
             Dashboard
         </a>
 
+        {{-- Enlace Productos --}}
         <a href="{{ route('admin.productos.index') }}"
            class="{{ request()->routeIs('admin.productos.*') ? 'active' : '' }}">
             Productos
+        </a>
+
+        {{-- NUEVO: Enlace Colecciones --}}
+        <a href="{{ route('admin.colecciones.index') }}"
+           class="{{ request()->routeIs('admin.colecciones.*') ? 'active' : '' }}">
+            Colecciones
         </a>
 
         <hr style="opacity: 0.2; border: 0; border-top: 1px solid #567; margin: 20px 0;">

@@ -53,3 +53,40 @@ body {
     padding-bottom: 10px;
     color: #2c3e50;
 }
+
+/* --- ARREGLO PAGINACIÓN LARAVEL --- */
+
+/* 1. Reducir el tamaño de las flechas gigantes (SVG) */
+nav svg {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* 2. Organizar la barra de paginación */
+nav[role="navigation"] > div:last-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* 3. Ocultar la versión móvil duplicada que genera Laravel */
+nav[role="navigation"] > div:first-child {
+    display: none;
+}
+
+/* 4. Estilo básico para los botones/enlaces */
+nav span, nav a {
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+}
+
+nav a:hover {
+    background-color: #e2e6ea; /* Color gris suave al pasar el ratón */
+}

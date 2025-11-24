@@ -1,55 +1,50 @@
 {{-- resources/views/productos.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'Coleccion1')
+@section('title', $title ?? 'Tienda') {{-- Usamos la variable $title si existe --}}
 
 @section('content')
     <main>
+        {{-- 1. NAVEGADOR DE CATEGORÍAS --}}
         <div class="capaNavegador">
             <ul class="navegador">
                 @php
                     if (isset($currentCollectionId)) {
                         $todoRoute = route('coleccion', $currentCollectionId);
-                        // Puedes obtener el nombre real de la colección si lo pasas desde el controlador,
-                        // pero por ahora usamos el ID.
-                        $title = 'Colección ' . $currentCollectionId;
+                        $title = 'Colección ' . $currentCollectionId; // O busca el nombre si lo pasas
                     } else {
                         $todoRoute = route('tienda');
                         $title = 'Tienda';
                     }
-
-                    // Actualiza el título de la página (si usas @section('title'))
-                    View::share('title', $title);
+                    // Esto es opcional si ya usas View::share en otro lado
+                    // View::share('title', $title);
                 @endphp
 
                 <li>·</li>
                 <li><a href="{{ $todoRoute }}">Todo</a></li>
                 <li>·</li>
 
-                {{-- Generar enlaces de categorías dinámicamente --}}
-                {{-- Usamos $categories que viene del controlador --}}
                 @foreach ($categories as $category)
                     <li>
-                        {{-- Comprueba si estamos en el contexto de una colección (ID NO NULO) --}}
                         @if (isset($currentCollectionId))
-                            {{-- Si hay una colección activa, usamos la ruta combinada para filtrar DENTRO de ella --}}
                             <a href="{{ route('coleccion.categoria.show', [
                                 'idColeccion' => $currentCollectionId,
-                                'idCategoria' => $category->id_categoria // Usamos la columna real de la BD
+                                'idCategoria' => $category->id_categoria
                             ]) }}">
                                 {{ $category->Nombre }}
                             </a>
                         @else
-                            {{-- Si no hay colección activa (estamos en /productos), usamos la ruta simple para filtrar en TODAS las colecciones --}}
                             <a href="{{ route('categoria.show', $category->id_categoria) }}">
                                 {{ $category->Nombre }}
                             </a>
                         @endif
                     </li>
                     <li>·</li>
-
-            @endforeach
+                @endforeach
+            </ul>
         </div>
+
+        {{-- 2. REJILLA DE PRODUCTOS --}}
         <div class="capaTabla">
             <div class="coleccionesTablet">
                 @foreach ($productos as $producto)
@@ -68,6 +63,10 @@
                     </div>
                 @endforeach
             </div>
+        </div>
+        <div class="pagination-area">
+            {{-- Esto genera los números de página automáticamente --}}
+            {{ $productos->links() }}
         </div>
     </main>
 @endsection

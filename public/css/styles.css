@@ -267,6 +267,86 @@ footer nav .enlacesD {
     font-weight: bold;
     text-decoration: underline;
 }
+
+.pagination-area {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    padding: 40px 0;
+    margin-top: 20px;
+}
+/* PAGINACION */
+/* 1. Contenedor principal: Centrar y limpiar */
+.pagination-area {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 40px 0;
+}
+
+/* 2. Ocultar textos y sombras de Laravel */
+.pagination-area nav > div:first-child,
+.pagination-area nav p {
+    display: none !important;
+}
+
+.pagination-area nav,
+.pagination-area nav > div:last-child {
+    box-shadow: none !important;
+}
+
+/* 3. ESTILOS DE LOS BOTONES (La corrección clave) */
+
+/* Enlaces normales (páginas 2, 3, flechas activas...) */
+.pagination-area nav a,
+    /* Página Actual (el 1 negro) */
+.pagination-area nav span[aria-current="page"],
+    /* Flechas deshabilitadas (cuando no puedes ir atrás) */
+.pagination-area nav span[aria-disabled="true"] {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 4. IMPORTANTE: Evitar que los contenedores genéricos cojan borde */
+/* Esto elimina el "doble borde" o caja externa */
+.pagination-area nav span:not([aria-current="page"]):not([aria-disabled="true"]) {
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* 5. Estilos específicos de estado */
+/* Deshabilitado (Gris flojo) */
+.pagination-area nav span[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: default;
+    background: #f9f9f9;
+}
+
+/* Hover en enlaces */
+.pagination-area nav a:hover {
+    background-color: #f0f0f0;
+}
+
+/* 6. Arreglar tamaño de iconos SVG */
+.pagination-area svg {
+    width: 16px !important;
+    height: 16px !important;
+}
+
 /* Columna 1: Menú */
 .drops-menu-area {
     flex: 0 0 250px;
@@ -289,7 +369,7 @@ footer nav .enlacesD {
 
 /* Columna 2: Imagen Principal */
 .main-image-view {
-    flex: 0 0 40%;
+    flex: 0 0 45%;
 }
 
 .drop-main-img {
@@ -301,12 +381,12 @@ footer nav .enlacesD {
 
 /* Columna 3: Miniaturas */
 .thumbnails-grid-area {
-    flex: 0 0 20%;
+    flex: 0 0 25%;
 }
 
 .thumbnails-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 miniaturas por fila en escritorio */
+    grid-template-columns: repeat(3, 1fr); /* 2 miniaturas por fila en escritorio */
     gap: 10px;
 }
 

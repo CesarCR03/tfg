@@ -59,7 +59,25 @@
                     </td>
 
                     <td style="padding: 12px;">
-                        <a href="#" style="color: #e74c3c; text-decoration: none;">Eliminar</a>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            {{-- Editar --}}
+                            <a href="{{ route('admin.productos.edit', $producto->id_producto) }}"
+                               style="color: #3498db; text-decoration: none; font-weight: bold; display: flex; align-items: center;">
+                                <span>Editar</span>
+                            </a>
+
+                            {{-- Eliminar --}}
+                            <form action="{{ route('admin.productos.destroy', $producto->id_producto) }}"
+                                  method="POST"
+                                  onsubmit="return confirm('¿Eliminar producto?');"
+                                  style="margin: 0;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="color: #e74c3c; background: none; border: none; cursor: pointer; font-weight: bold; display: flex; align-items: center;">
+                                    <span>Eliminar</span>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @endforeach

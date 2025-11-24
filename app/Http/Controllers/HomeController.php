@@ -27,7 +27,7 @@ class HomeController extends Controller
             $query->where('stock', '>', 0);
         })
             ->with('imagenes')
-            ->take(6)
+            ->take(8)
             ->get();
 
         return view('home', compact('categorias', 'productos', 'colecciones'));

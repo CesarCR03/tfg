@@ -24,7 +24,6 @@ Route::get('/locations', [HomeController::class, 'locations'])->name('locations'
 
 // 4. Rutas de "Drops"
 Route::get('/menu/drops', [HomeController::class, 'drops'])->name('drops.index');
-//Route::get('/menu/drops/{idColeccion}', [HomeController::class, 'drops'])->name('drops.show');
 Route::get('/drops/{idColeccion?}', [HomeController::class, 'drops'])->name('drops');
 // 5. Rutas del Carrito
 Route::get('/carrito', [CartController::class, 'showCart'])->name('cart.show');
@@ -51,12 +50,25 @@ Route::middleware(['auth'])
     ->group(function () {
 
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+
+
+
+        // --- PRODUCTOS ---
         Route::get('/productos', [AdminController::class, 'productosIndex'])->name('productos.index');
-        // 1. Mostrar el formulario
         Route::get('/productos/crear', [AdminController::class, 'productoCreate'])->name('productos.create');
-        // 2. Guardar los datos (POST)
+        Route::get('/productos/{id}/editar', [AdminController::class, 'productoEdit'])->name('productos.edit');
+        Route::put('/productos/{id}', [AdminController::class, 'productoUpdate'])->name('productos.update');
+        Route::delete('/productos/{id}', [AdminController::class, 'productoDestroy'])->name('productos.destroy');
         Route::post('/productos', [AdminController::class, 'productoStore'])->name('productos.store');
+        // --- COLECCIONES ---
+        // NUEVO: Ruta para VER la lista de colecciones
+        Route::get('/colecciones', [AdminController::class, 'coleccionesIndex'])->name('colecciones.index');
         Route::get('/colecciones/crear', [AdminController::class, 'coleccionCreate'])->name('colecciones.create');
         Route::post('/colecciones', [AdminController::class, 'coleccionStore'])->name('colecciones.store');
+        Route::delete('/colecciones/{id}', [AdminController::class, 'coleccionDestroy'])->name('colecciones.destroy');
+        // --- RUTAS DE EDICIÓN DE COLECCIONES ---
+        Route::get('/colecciones/{id}/editar', [AdminController::class, 'coleccionEdit'])->name('colecciones.edit');
+        Route::put('/colecciones/{id}', [AdminController::class, 'coleccionUpdate'])->name('colecciones.update');
     });
 

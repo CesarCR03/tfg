@@ -17,7 +17,7 @@ class ProductoController extends Controller
     }
     public function showProducts()
     {
-        $productos = Producto::with('imagenes')->paginate(12);
+        $productos = Producto::with('imagenes')->paginate(15);
         return $this->returnViewWithContext($productos, null);
     }
 
@@ -33,7 +33,7 @@ class ProductoController extends Controller
             ->whereHas('categorias', function ($query) use ($idCategoria) {
                 $query->where('Categoria.id_categoria', $idCategoria);
             })
-            ->paginate(12);
+            ->paginate(15);
 
         // USAR SIEMPRE la función helper que pasa $categories
         return $this->returnViewWithContext($productos, null);
@@ -50,7 +50,7 @@ class ProductoController extends Controller
                 // que coincida con el id_coleccion proporcionado.
                 $query->where('Coleccion.id_coleccion', $idColeccion);
             })
-            ->paginate(12);
+            ->paginate(15);
 
         return $this->returnViewWithContext($productos, $idColeccion);
     }
@@ -66,7 +66,7 @@ class ProductoController extends Controller
             ->whereHas('categorias', function ($query) use ($idCategoria) {
                 $query->where('Categoria.id_categoria', $idCategoria);
             })
-            ->paginate(12);
+            ->paginate(15);
 
         // Pasamos el ID de la colección para mantener el contexto en la vista
         return $this->returnViewWithContext($productos, $idColeccion);
