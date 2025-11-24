@@ -24,8 +24,8 @@ Route::get('/locations', [HomeController::class, 'locations'])->name('locations'
 
 // 4. Rutas de "Drops"
 Route::get('/menu/drops', [HomeController::class, 'drops'])->name('drops.index');
-Route::get('/menu/drops/{idColeccion}', [HomeController::class, 'drops'])->name('drops.show');
-
+//Route::get('/menu/drops/{idColeccion}', [HomeController::class, 'drops'])->name('drops.show');
+Route::get('/drops/{idColeccion?}', [HomeController::class, 'drops'])->name('drops');
 // 5. Rutas del Carrito
 Route::get('/carrito', [CartController::class, 'showCart'])->name('cart.show');
 Route::post('/carrito/add', [CartController::class, 'addToCart'])->name('cart.add');

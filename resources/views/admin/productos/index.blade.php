@@ -4,10 +4,18 @@
 
 @section('content')
     <div style="margin-bottom: 20px; text-align: right;">
-        <a href="{{route('admin.productos.create')}}" style="background-color: #27ae60; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+        {{-- Enlace al formulario de crear --}}
+        <a href="{{ route('admin.productos.create') }}" style="background-color: #27ae60; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
             + Nuevo Producto
         </a>
     </div>
+
+    {{-- Mensaje de Éxito --}}
+    @if(session('success'))
+        <div style="background-color: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
         <table style="width: 100%; border-collapse: collapse;">
@@ -17,7 +25,7 @@
                 <th style="padding: 12px; border-bottom: 2px solid #ddd;">Imagen</th>
                 <th style="padding: 12px; border-bottom: 2px solid #ddd;">Nombre</th>
                 <th style="padding: 12px; border-bottom: 2px solid #ddd;">Precio</th>
-                <th style="padding: 12px; border-bottom: 2px solid #ddd;">Stock Total</th>
+                <th style="padding: 12px; border-bottom: 2px solid #ddd;">Stock</th>
                 <th style="padding: 12px; border-bottom: 2px solid #ddd;">Acciones</th>
             </tr>
             </thead>
@@ -25,30 +33,39 @@
             @foreach($productos as $producto)
                 <tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 12px;">{{ $producto->id_producto }}</td>
+
+                    {{-- COLUMNA IMAGEN (Protegida contra errores) --}}
                     <td style="padding: 12px;">
-                        @if($producto->imagenes->isNotEmpty())
+                        @if($producto->imagenes && $producto->imagenes->isNotEmpty())
+                            {{-- Probamos a mostrar la imagen --}}
                             <img src="{{ asset('storage/' . $producto->imagenes->first()->URL) }}"
+                                 alt="Img"
                                  style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
                         @else
-                            <span style="color: #ccc;">Sin img</span>
+                            <span style="color: #999; font-size: 0.8em;">Sin Imagen</span>
                         @endif
                     </td>
+
                     <td style="padding: 12px;"><strong>{{ $producto->Nombre }}</strong></td>
                     <td style="padding: 12px;">{{ number_format($producto->Precio, 2) }}€</td>
+
+                    {{-- COLUMNA STOCK (Protegida) --}}
                     <td style="padding: 12px;">
-                        {{-- Sumamos el stock de todas las tallas --}}
-                        {{ $producto->tallas->sum('stock') }} u.
+                        @if($producto->tallas)
+                            {{ $producto->tallas->sum('stock') }}
+                        @else
+                            0
+                        @endif
                     </td>
+
                     <td style="padding: 12px;">
-                        <a href="#" style="color: #3498db; text-decoration: none; margin-right: 10px;">Editar</a>
-                        <a href="#" style="color: #e74c3c; text-decoration: none;">Borrar</a>
+                        <a href="#" style="color: #e74c3c; text-decoration: none;">Eliminar</a>
                     </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
 
-        {{-- Paginación --}}
         <div style="margin-top: 20px;">
             {{ $productos->links() }}
         </div>

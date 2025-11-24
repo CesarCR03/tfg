@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Drops - ' . ($selectedCollection->Nombre ?? 'Escaparate'))
+@section('title', 'Drops - ' . ($selectedCollection->Nombre ?? 'Galería'))
 
 @section('content')
     <main>
@@ -11,79 +11,107 @@
                 <div class="fechasDrops">
                     <h2 class="menu-title">LOOKBOOK</h2>
                     <ul>
-                        @foreach ($allCollections as $collection)
-                            <li>
-                                <a href="{{ route('drops.show', $collection->id_coleccion) }}"
-                                   class="{{ $collection->id_coleccion == $currentCollectionId ? 'active-drop-link' : '' }}">
-                                    {{ $collection->Nombre }}
-                                </a>
-                            </li>
-                        @endforeach
+                        @if(isset($allCollections))
+                            @foreach ($allCollections as $collection)
+                                <li>
+                                    {{-- Aquí usamos el NAME de la ruta definido en el paso 1 --}}
+                                    <a href="{{ route('drops', ['idColeccion' => $collection->id_coleccion]) }}"
+                                       class="{{ (isset($currentCollectionId) && $collection->id_coleccion == $currentCollectionId) ? 'active-drop-link' : '' }}">
+                                        {{ $collection->Nombre }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        @endif
                     </ul>
                 </div>
             </div>
 
-            {{-- COLUMNA 2 Y 3: GALERÍA Y MINIATURAS --}}
-            @if ($selectedCollection && $imagenes->isNotEmpty())
-                <div class="gallery-content-area">
+            {{-- COLUMNA 2 Y 3: GALERÍA --}}
+            @if (isset($selectedCollection) && isset($imagenes) && $imagenes->isNotEmpty())
 
+                @php
+                    $firstImg = $imagenes->first();
+                    $mainSrc = '';
+
+                    if ($firstImg && $firstImg->URL) {
+                        if (str_starts_with($firstImg->URL, '../../')) {
+                            $mainSrc = asset(str_replace('../../', '', $firstImg->URL));
+                        } else {
+                            $mainSrc = asset('storage/' . $firstImg->URL);
+                        }
+                    }
+                @endphp
+
+                <div class="gallery-content-area">
                     {{-- IMAGEN PRINCIPAL --}}
                     <div class="main-image-view">
-                        {{-- La imagen se carga con la URL del primer producto por defecto --}}
-                        <img id="main-drop-image"
-                             src="{{ asset('storage/' . $imagenes->first()->URL) }}"
-                             class="drop-main-img">
+                        @if($mainSrc)
+                            <img id="main-drop-image"
+                                 src="{{ $mainSrc }}"
+                                 alt="Imagen Principal"
+                                 class="drop-main-img">
+                        @endif
                     </div>
 
-                    {{-- MINIATURAS (THUMBNAILS) --}}
+                    {{-- MINIATURAS --}}
                     <div class="thumbnails-grid-area">
                         <div class="thumbnails-grid">
                             @foreach ($imagenes as $imagen)
-                                <div class="thumbnail-item">
-                                    <img src="{{ asset('storage/' . $imagen->URL) }}"
-                                         alt="Miniatura de Lookbook"
-                                         data-full-src="{{ asset('storage/' . $imagen->URL) }}"
-                                         class="thumbnail-img">
-                                </div>
+                                @php
+                                    $finalUrl = '';
+                                    if ($imagen->URL) {
+                                        if (str_starts_with($imagen->URL, '../../')) {
+                                            $finalUrl = asset(str_replace('../../', '', $imagen->URL));
+                                        } else {
+                                            $finalUrl = asset('storage/' . $imagen->URL);
+                                        }
+                                    }
+                                @endphp
+
+                                @if($finalUrl)
+                                    <div class="thumbnail-item">
+                                        <img src="{{ $finalUrl }}"
+                                             alt="Miniatura"
+                                             data-full-src="{{ $finalUrl }}"
+                                             class="thumbnail-img {{ $loop->first ? 'active-thumbnail' : '' }}">
+                                    </div>
+                                @endif
                             @endforeach
                         </div>
                     </div>
                 </div>
             @else
-                <div class="gallery-content-area">
-                    <p>Selecciona una colección o no hay productos en la colección actual.</p>
+                <div class="gallery-content-area" style="display: flex; justify-content: center; align-items: center; height: 50vh;">
+                    <p>Selecciona una colección para ver sus fotos.</p>
                 </div>
             @endif
         </div>
     </main>
 
-    {{-- SCRIPTS PARA INTERACTIVIDAD --}}
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const mainImage = document.getElementById('main-drop-image');
                 const thumbnails = document.querySelectorAll('.thumbnail-img');
 
-                thumbnails.forEach(thumbnail => {
-                    thumbnail.addEventListener('click', function() {
-                        const fullSrc = this.getAttribute('data-full-src');
+                if (mainImage && thumbnails.length > 0) {
+                    thumbnails.forEach(thumbnail => {
+                        thumbnail.addEventListener('click', function() {
+                            const fullSrc = this.getAttribute('data-full-src');
+                            // Evitar parpadeo si es la misma imagen
+                            if (mainImage.src === fullSrc) return;
 
-                        // 1. Cambia la fuente de la imagen principal al hacer clic
-                        if (mainImage && fullSrc) {
-                            mainImage.src = fullSrc;
-                            mainImage.alt = this.alt;
-                        }
+                            mainImage.style.opacity = '0.5';
+                            setTimeout(() => {
+                                mainImage.src = fullSrc;
+                                mainImage.style.opacity = '1';
+                            }, 150);
 
-                        // 2. Opcional: Resaltar la miniatura activa (clase CSS)
-                        thumbnails.forEach(t => t.classList.remove('active-thumbnail'));
-                        this.classList.add('active-thumbnail');
+                            thumbnails.forEach(t => t.classList.remove('active-thumbnail'));
+                            this.classList.add('active-thumbnail');
+                        });
                     });
-
-                    // 3. Establecer la primera miniatura como activa al cargar
-                    if (mainImage && thumbnail === thumbnails[0]) {
-                        thumbnail.classList.add('active-thumbnail');
-                    }
-                });
+                }
             });
         </script>
     @endpush

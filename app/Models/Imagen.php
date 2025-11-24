@@ -12,6 +12,7 @@ class Imagen extends Model
 
     protected $table = 'Imagen';
     protected $primaryKey = 'id_imagen';
+    public $timestamps = false;
     protected $fillable = [
         'URL',
         'producto_id',

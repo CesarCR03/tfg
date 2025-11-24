@@ -22,9 +22,6 @@
             <img src="{{ asset('Img/PaginaPrincipal/user_17740782.png') }}" alt="Mi Perfil">
         </a>
                 @endauth
-                <a href="{{ route('home') }}">
-                    <img src="{{ asset('Img/PaginaPrincipal/world_16396755.png') }}" alt="cambiar idioma">
-                </a>
             </span>
             <span class="enlacesP">
                 <a href="{{ route('tienda') }}" class="aux">Tienda</a>

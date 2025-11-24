@@ -6,7 +6,7 @@ use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Coleccion;
 use Illuminate\Http\Request;
-
+use App\Models\Imagen;
 class HomeController extends Controller
 {
     /**
@@ -16,19 +16,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Cargar todas las categorías
+        // 1. Cargar datos existentes
         $categorias = Categoria::all();
 
-        // Cargar productos en stock (puedes ajustar el filtro o el número)
+        // 2. NUEVO: Cargar Colecciones (Ordenadas por las más recientes primero)
+        $colecciones = Coleccion::orderBy('id_coleccion', 'asc')->get();
+
+        // 3. Lógica de productos (la que ya tenías para filtrar por stock)
         $productos = Producto::whereHas('tallas', function ($query) {
             $query->where('stock', '>', 0);
         })
-            ->with('imagenes')   // precargar imágenes
-            ->take(6)            // mostrar solo 6
+            ->with('imagenes')
+            ->take(6)
             ->get();
 
-        // Devolver la vista 'home' pasándole los datos
-        return view('home', compact('categorias', 'productos'));
+        return view('home', compact('categorias', 'productos', 'colecciones'));
     }
     public function locations()
     {
@@ -39,22 +41,47 @@ class HomeController extends Controller
      */
     public function drops($idColeccion = null)
     {
+        // 1. Cargar todas las colecciones para el menú
         $allCollections = Coleccion::orderBy('id_coleccion', 'desc')->get();
 
-        $currentCollectionId = $idColeccion ?? optional($allCollections->first())->id_coleccion;
+        // 2. Determinar ID actual
+        $currentCollectionId = $idColeccion ?: ($allCollections->first() ? $allCollections->first()->id_coleccion : null);
 
         $selectedCollection = null;
-        $imagenes = collect([]); // Usaremos $imagenes en lugar de $productos
+        $imagenes = collect([]);
 
         if ($currentCollectionId) {
-            // CAMBIO DE LÓGICA: Cargar la relación 'imagenes()'
-            $selectedCollection = Coleccion::with('imagenes')->find($currentCollectionId);
+            // 3. Cargar colección y relaciones
+            $selectedCollection = Coleccion::with(['imagenes', 'productos.imagenes'])
+                ->find($currentCollectionId);
 
-            // Extraer las imágenes para la galería
-            $imagenes = $selectedCollection ? $selectedCollection->imagenes : collect([]);
+            if ($selectedCollection) {
+                // A. Imágenes manuales (Lookbook)
+                $lookbookImages = $selectedCollection->imagenes;
+
+                // B. Imágenes de Productos
+                $productImages = $selectedCollection->productos->flatMap(function ($producto) {
+                    return $producto->imagenes;
+                });
+
+                // C. Fusionar y limpiar duplicados
+                $imagenes = $lookbookImages->merge($productImages)->unique('id_imagen');
+
+                // 4. (NUEVO) Agregar la PORTADA de la Colección al principio
+                if ($selectedCollection->imagen_url) {
+                    // Creamos una instancia de Imagen "al vuelo"
+                    $portada = new Imagen();
+                    $portada->URL = $selectedCollection->imagen_url;
+
+                    // Le damos un ID temporal para que no choque, aunque la vista usa solo la URL
+                    $portada->id_imagen = 'cover_' . $selectedCollection->id_coleccion;
+
+                    // La insertamos AL PRINCIPIO de la colección
+                    $imagenes->prepend($portada);
+                }
+            }
         }
 
-        // Pasamos $imagenes a la vista
         return view('drops', compact('allCollections', 'imagenes', 'currentCollectionId', 'selectedCollection'));
     }
 }

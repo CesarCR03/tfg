@@ -18,7 +18,10 @@ class Coleccion extends Model
 
     // Campos que pueden asignarse masivamente
     protected $fillable = [
-        'Nombre'
+        'id_coleccion',
+        'Nombre',
+        'Año',
+        'imagen_url'
     ];
 
     /**
